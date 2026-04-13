@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-zinc-950: #0a0a0b;
+  --color-zinc-900: #18181b;
+  --color-primary-glow: rgba(120, 119, 198, 0.2);
+}
+
+:root {
+  --background: #0a0a0b;
+  --foreground: #fafafa;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-2xl;
+  }
+  .animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+  }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
