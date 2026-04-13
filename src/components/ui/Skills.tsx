@@ -12,7 +12,7 @@ import { FaJava } from 'react-icons/fa'
 import { skillGroups } from '@/data/projects'
 
 // Map tech names to react-icons components + brand color
-const iconMap: Record<string, { icon: React.ElementType; color: string }> = {
+const iconMap: Record<string, { icon: any; color: string }> = {
   Java:        { icon: FaJava,       color: '#f89820' },
   SpringBoot:  { icon: SiSpringboot, color: '#6DB33F' },
   Flutter:     { icon: SiFlutter,    color: '#54C5F8' },
