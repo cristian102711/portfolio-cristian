@@ -6,7 +6,7 @@ import { ArrowDown, Mail, Download } from 'lucide-react'
 import { FiGithub } from 'react-icons/fi'
 import { FaLinkedinIn } from 'react-icons/fa'
 
-const variants = {
+const variants: any = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
     opacity: 1,
