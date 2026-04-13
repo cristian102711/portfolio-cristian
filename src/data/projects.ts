@@ -18,6 +18,15 @@ export interface Education {
   icon: string
 }
 
+export interface Experience {
+  role: string
+  company: string
+  period: string
+  location: string
+  highlights: string[]
+  type: 'fulltime' | 'parttime' | 'freelance'
+}
+
 export const projects: Project[] = [
   {
     id: '01',
@@ -118,3 +127,43 @@ export const skillGroups = [
     skills: ['Flutter', 'Kotlin', 'Android', 'RestAPI', 'OpenAI'],
   },
 ]
+
+export const experiences: Experience[] = [
+  {
+    role: 'Desarrollador Web Junior',
+    company: 'Awna Digital SpA',
+    period: 'Feb 2026 – Abr 2026',
+    location: 'Las Condes, Santiago',
+    type: 'fulltime',
+    highlights: [
+      'Desarrollé de 0 a producción plataforma SaaS de tarjetas digitales con QR dinámico (Next.js, MongoDB, JWT) con 81 deployments en Vercel.',
+      'Migré infraestructura web de cliente activo (INFORMAX) a Hostinger, resolviendo error crítico WSOD de forma autónoma.',
+      'Elaboré documentación técnica de más de 35 páginas y colaboré en desarrollo de sitios corporativos con Elementor Pro.',
+      'Proyecto validado y aprobado directamente por el CEO de la empresa.',
+    ],
+  },
+  {
+    role: 'Analista de Monitoreo y Soporte Técnico',
+    company: 'BS2',
+    period: 'Oct 2025 – Dic 2025',
+    location: 'Santiago, Chile',
+    type: 'fulltime',
+    highlights: [
+      'Monitoreé plataformas críticas bancarias con Dynatrace, analizando logs en entornos Linux y Windows Server.',
+      'Automaticé procesos con Python y Shell Script, logrando reducción del 30% en tiempos de respuesta a incidentes.',
+      'Coordiné con equipos DEV y OPS para resolución de incidencias en producción.',
+    ],
+  },
+  {
+    role: 'Full Stack Developer Freelance',
+    company: 'Independiente',
+    period: 'Ene 2024 – Actual',
+    location: 'Santiago, Chile',
+    type: 'freelance',
+    highlights: [
+      'Desarrollé plataformas web con React, Node.js, Express y SQL, incluyendo APIs REST con autenticación y manejo de roles.',
+      'Construí aplicaciones móviles con Flutter, Firebase y Android nativo (Kotlin) con arquitectura MVVM.',
+    ],
+  },
+]
+

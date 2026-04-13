@@ -2,7 +2,7 @@ import Navbar from '@/components/shared/Navbar'
 import Hero from '@/components/ui/Hero'
 import About from '@/components/ui/About'
 import Projects from '@/components/ui/Projects'
-import Education from '@/components/ui/Education'
+import Experience from '@/components/ui/Experience'
 import Skills from '@/components/ui/Skills'
 import Contact from '@/components/ui/Contact'
 
@@ -13,8 +13,8 @@ export default function HomePage() {
       <Hero />
       <About />
       <Skills />
+      <Experience />
       <Projects />
-      <Education />
       <Contact />
     </main>
   )
