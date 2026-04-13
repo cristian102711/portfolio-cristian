@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import { Download, MapPin, Mail } from 'lucide-react'
 
 export default function About() {
@@ -25,18 +24,7 @@ export default function About() {
                 <div className="w-full h-full rounded-full bg-zinc-950" />
               </div>
               <div className="absolute inset-[3px] rounded-full overflow-hidden bg-zinc-800 border-2 border-violet-500/30">
-                <Image
-                  src="/images/profile.jpg"
-                  alt="Cristian Velásquez — Analista Programador"
-                  fill
-                  className="object-cover"
-                  priority
-                  onError={(e) => {
-                    // Fallback to initials avatar if no photo yet
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
-                {/* Fallback avatar */}
+                {/* Fallback avatar (No profile photo uploaded yet) */}
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-900 to-fuchsia-900">
                   <span className="text-5xl font-black text-white/90 select-none tracking-tighter">
                     CV
@@ -61,7 +49,7 @@ export default function About() {
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Mail size={13} />
-                  <span>cristian102711</span>
+                  <span>cris.velasquezc@duocuc.cl</span>
                 </span>
               </div>
             </div>
