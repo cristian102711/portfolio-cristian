@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { education } from '@/data/projects'
 import { GraduationCap, Briefcase, ShieldCheck, Award, Building2, Backpack } from 'lucide-react'
 
-const iconMap: Record<string, React.ElementType> = {
+const iconMap: Record<string, any> = {
   graduation: GraduationCap,
   briefcase: Briefcase,
   shield: ShieldCheck,
