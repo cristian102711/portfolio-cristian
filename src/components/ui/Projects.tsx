@@ -84,6 +84,9 @@ export default function Projects() {
                     <h3 className="mt-3 text-xl font-bold text-white group-hover:text-violet-200 transition-colors">
                       {project.title}
                     </h3>
+                    <p className="text-xs text-violet-400/80 mt-1.5 font-medium tracking-wide">
+                      {project.period}
+                    </p>
                   </div>
                   <span className="text-4xl font-black text-zinc-800 group-hover:text-zinc-700 transition-colors">
                     {project.id}

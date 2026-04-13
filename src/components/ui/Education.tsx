@@ -2,6 +2,16 @@
 
 import { motion } from 'framer-motion'
 import { education } from '@/data/projects'
+import { GraduationCap, Briefcase, ShieldCheck, Award, Building2, Backpack } from 'lucide-react'
+
+const iconMap: Record<string, React.ElementType> = {
+  graduation: GraduationCap,
+  briefcase: Briefcase,
+  shield: ShieldCheck,
+  certificate: Award,
+  school: Building2,
+  backpack: Backpack,
+}
 
 export default function Education() {
   return (
@@ -63,7 +73,12 @@ export default function Education() {
                   {/* Card */}
                   <div className="glass-card p-6 flex-1 hover:border-violet-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/10 group">
                     <div className="flex items-start gap-4">
-                      <div className="text-3xl flex-shrink-0 mt-0.5">{edu.icon}</div>
+                      <div className="flex-shrink-0 mt-0.5 w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 group-hover:scale-110 group-hover:bg-violet-500/20 transition-all">
+                        {(() => {
+                          const Icon = iconMap[edu.icon] || GraduationCap
+                          return <Icon size={24} />
+                        })()}
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                           <h3 className="text-lg font-bold text-white group-hover:text-violet-200 transition-colors">

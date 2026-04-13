@@ -1,6 +1,7 @@
 export interface Project {
   id: string
   title: string
+  period: string
   description: string
   tech: string[]
   image: string
@@ -20,7 +21,8 @@ export interface Education {
 export const projects: Project[] = [
   {
     id: '01',
-    title: 'CardsVirtual',
+    title: 'FullStack Developer & Architect (Práctica Profesional)',
+    period: 'Feb 2026 – Abr 2026',
     description: 'SaaS de tarjetas digitales con QR dinámico, panel admin CRUD, motor de analíticas y autenticación por roles. Deployado en producción y aprobado por CEO.',
     tech: ['Next.js', 'MongoDB', 'JWT', 'TypeScript', 'Vercel'],
     image: '/images/project1.png',
@@ -31,6 +33,7 @@ export const projects: Project[] = [
   {
     id: '02',
     title: 'NeuroDesk',
+    period: 'Ene 2026 – Mar 2026',
     description: 'Plataforma SaaS multi-herramienta de IA con chat, resúmenes y generador de imágenes. Monetización con Mercado Pago vía Webhooks y rate limiting.',
     tech: ['Next.js', 'PostgreSQL', 'Prisma', 'OpenAI'],
     image: '/images/project2.png',
@@ -41,6 +44,7 @@ export const projects: Project[] = [
   {
     id: '03',
     title: 'PowerPlay',
+    period: 'Dic 2025 – Feb 2026',
     description: 'E-commerce con autenticación segura (Supabase), carrito asíncrono y UI glassmorphism. CI/CD integrado con GitHub y Vercel.',
     tech: ['React', 'Supabase', 'Vite', 'Tailwind'],
     image: '/images/project3.png',
@@ -51,6 +55,7 @@ export const projects: Project[] = [
   {
     id: '04',
     title: 'Sorteo San Valentín',
+    period: 'Ene 2026 – Feb 2026',
     description: 'Sistema asíncrono dockerizado para alto volumen de concurrencia. Prueba técnica real para cargo Full Stack Developer (CTS Turismo).',
     tech: ['Django', 'Vue 3', 'Celery', 'Redis', 'Docker'],
     image: '/images/project4.png',
@@ -66,50 +71,64 @@ export const education: Education[] = [
     institution: 'Instituto Profesional Duoc UC, Sede Plaza Norte',
     period: 'Mar 2024 – 2026',
     description: 'Desarrollador Junior Full Stack egresado de Duoc UC. Rápido aprendizaje, trabajo en equipo y enfoque en entornos de producción.',
-    icon: '🎓',
+    icon: 'graduation',
   },
   {
-    degree: 'Desarrollador Web Junior',
+    degree: 'FullStack Developer & Architect (Práctica Profesional)',
     institution: 'Awna Digital SpA',
     period: 'Feb 2026 – Abr 2026',
     description: 'Desarrolló plataforma SaaS CardsVirtual. Migró infraestructura (resolviendo WSOD), y colaboró en sitios corporativos documentando procesos.',
-    icon: '💼',
+    icon: 'briefcase',
   },
   {
     degree: 'Analista de Monitoreo y Soporte',
     institution: 'BS2',
     period: 'Oct 2025 – Dic 2025',
     description: 'Monitoreo de plataformas críticas bancarias (Dynatrace), análisis en Linux/Windows. Automatizó con Python reduciendo en 30% tiempos de atención.',
-    icon: '🛡️',
+    icon: 'shield',
   },
   {
     degree: 'Certificaciones IT & Cloud',
     institution: 'Microsoft, Cisco, Python Institute',
     period: '2024 – 2025',
     description: 'PCEP (Python Certified Entry-Level Programmer), Microsoft Azure AI Fundamentals AI-900, y Cisco Cybersecurity Essentials.',
-    icon: '📜',
+    icon: 'certificate',
+  },
+  {
+    degree: 'Técnico Medio en Administración Mención RR.HH',
+    institution: 'Colegio Padre Pedro Arrupe',
+    period: '2020',
+    description: 'Especialización en áreas de gestión de personas, legislación laboral, bienestar y procesos administrativos.',
+    icon: 'school',
+  },
+  {
+    degree: 'Educación Media',
+    institution: "Liceo Ingeniero Militar Juan Mackenna O'Reilly, Chile",
+    period: '2015 – 2018',
+    description: 'Estudiante de enseñanza media.',
+    icon: 'backpack',
   },
 ]
 
 export const skillGroups = [
   {
     category: 'Frontend',
-    skills: ['NextJs', 'React', 'TypeScript', 'Tailwind', 'Vue'],
+    skills: ['NextJs', 'React', 'TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind', 'Vue'],
   },
   {
     category: 'Backend',
-    skills: ['NodeJs', 'Django', 'Python'],
+    skills: ['NodeJs', 'Express', 'Java', 'SpringBoot', 'Django', 'Python'],
   },
   {
-    category: 'Bases de Datos',
-    skills: ['MongoDB', 'PostgreSQL', 'MySQL', 'Firebase'],
+    category: 'Data & Bases de Datos',
+    skills: ['PostgreSQL', 'MongoDB', 'MySQL', 'DataSQL', 'Firebase', 'PowerBI'],
   },
   {
-    category: 'DevOps & DevOps',
-    skills: ['Docker', 'Vercel', 'Git', 'Linux'],
+    category: 'DevOps & Herramientas',
+    skills: ['Git', 'GitHub', 'GitHubActions', 'Docker', 'Vercel', 'Linux'],
   },
   {
     category: 'Mobile & APIs',
-    skills: ['Flutter', 'Android', 'OpenAI'],
+    skills: ['Flutter', 'Kotlin', 'Android', 'RestAPI', 'OpenAI'],
   },
 ]
