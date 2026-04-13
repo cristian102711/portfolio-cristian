@@ -83,17 +83,10 @@ export const education: Education[] = [
     icon: 'graduation',
   },
   {
-    degree: 'Técnico Medio en Administración Mención RR.HH',
-    institution: 'Colegio Padre Pedro Arrupe',
-    period: '2020',
-    description: 'Especialización en gestión de personas, legislación laboral y procesos administrativos.',
-    icon: 'school',
-  },
-  {
-    degree: 'Educación Media',
+    degree: 'Educación Media — Administración de Empresas Mención RR.HH',
     institution: "Liceo Ingeniero Militar Juan Mackenna O'Reilly, Chile",
     period: '2015 – 2018',
-    description: 'Enseñanza media completa.',
+    description: 'Enseñanza media con especialidad en Administración de Empresas y Mención en Recursos Humanos.',
     icon: 'backpack',
   },
 ]
