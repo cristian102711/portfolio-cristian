@@ -87,12 +87,11 @@ export default function Hero() {
             animate="visible"
             className="text-zinc-400 text-lg leading-relaxed max-w-2xl mt-2"
           >
-            Construyo aplicaciones web completas y escalables con{' '}
-            <span className="text-white font-medium">Next.js</span>,{' '}
-            <span className="text-cyan-400 font-medium">React</span>,{' '}
-            <span className="text-green-400 font-medium">Node.js</span> y{' '}
-            <span className="text-green-500 font-medium">MongoDB</span>. 
-            Deployadas en Vercel listas para producción.
+            Desarrollador apasionado por construir productos digitales que resuelven problemas reales.
+            Combino{' '}
+            <span className="text-white font-medium">visión técnica</span> con{' '}
+            <span className="text-violet-400 font-medium">curiosidad constante</span>{' '}
+            para crear soluciones escalables, limpias y listas para producción — desde APIs hasta interfaces que enamoran al usuario.
           </motion.p>
 
           <motion.div

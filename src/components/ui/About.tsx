@@ -69,13 +69,18 @@ export default function About() {
             {/* About text */}
             <div className="space-y-4 text-zinc-400 leading-relaxed text-sm lg:text-base">
               <p>
-                Desarrollador Junior Full Stack egresado de Duoc UC, especializado en
-                construir aplicaciones SaaS funcionales y deployadas en producción con{' '}
-                <span className="text-white font-medium">Next.js, React, Node.js y MongoDB</span>.
+                Soy{' '}
+                <span className="text-white font-medium">Analista Programador en formación en Duoc UC</span>,
+                con experiencia real desarrollando productos Full Stack en entornos de producción.
+                Construyo desde cero sistemas web complejos con{' '}
+                <span className="text-violet-300 font-medium">Next.js, React, Node.js, Java y Flutter</span>,
+                integrando autenticación, bases de datos y despliegue continuo.
               </p>
               <p>
-                Cuento con historial verificable en GitHub desarrollando <span className="text-violet-300 font-medium">código real y documentación técnica</span>. 
-                Tengo rápido aprendizaje, fuerte trabajo en equipo y disponibilidad inmediata para sumar valor a tu stack.
+                Me adapto rápido a nuevos stacks, aprendo de forma autónoma y disfruto el trabajo colaborativo
+                con equipos técnicos. Mi objetivo es crear{' '}
+                <span className="text-cyan-400 font-medium">sistemas escalables, modulares y seguros</span>{' '}
+                que generen impacto real en el negocio y en los usuarios.
               </p>
             </div>
 
@@ -98,7 +103,7 @@ export default function About() {
 
             {/* CV Download */}
             <motion.a
-              href="/cv/Cristian_Velasquez_CV.pdf"
+              href="/cv/CV_Cristianvelasquez.pdf"
               download
               className="flex items-center gap-3 px-6 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-sm w-full justify-center hover:shadow-lg hover:shadow-violet-500/30 transition-all"
               whileHover={{ scale: 1.03 }}
