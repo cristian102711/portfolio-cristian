@@ -74,13 +74,6 @@ export const education: Education[] = [
     icon: 'graduation',
   },
   {
-    degree: 'FullStack Developer & Architect (Práctica Profesional)',
-    institution: 'Awna Digital SpA',
-    period: 'Feb 2026 – Abr 2026',
-    description: 'Desarrolló plataforma SaaS CardsVirtual. Migró infraestructura (resolviendo WSOD), y colaboró en sitios corporativos documentando procesos.',
-    icon: 'briefcase',
-  },
-  {
     degree: 'Analista de Monitoreo y Soporte',
     institution: 'BS2',
     period: 'Oct 2025 – Dic 2025',
@@ -93,13 +86,6 @@ export const education: Education[] = [
     period: '2024 – 2025',
     description: 'PCEP (Python Certified Entry-Level Programmer), Microsoft Azure AI Fundamentals AI-900, y Cisco Cybersecurity Essentials.',
     icon: 'certificate',
-  },
-  {
-    degree: 'Técnico Medio en Administración Mención RR.HH',
-    institution: 'Colegio Padre Pedro Arrupe',
-    period: '2020',
-    description: 'Especialización en áreas de gestión de personas, legislación laboral, bienestar y procesos administrativos.',
-    icon: 'school',
   },
   {
     degree: 'Educación Media',
