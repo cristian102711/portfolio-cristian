@@ -4,6 +4,7 @@ import About from '@/components/ui/About'
 import Projects from '@/components/ui/Projects'
 import Experience from '@/components/ui/Experience'
 import Skills from '@/components/ui/Skills'
+import Education from '@/components/ui/Education'
 import Contact from '@/components/ui/Contact'
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
       <Skills />
       <Experience />
       <Projects />
+      <Education />
       <Contact />
     </main>
   )
