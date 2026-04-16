@@ -24,7 +24,7 @@ export default function Projects() {
   const { setActiveProject } = usePortfolio()
 
   return (
-    <section id="projects" className="relative py-20 px-6">
+    <section id="projects" className="relative py-20 px-4 sm:px-6 lg:px-8">
       {/* Section glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-transparent to-violet-500/50" />
 

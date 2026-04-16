@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Code2, Server, Database, Wrench, Smartphone } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 interface SkillGroup {
   category: string
@@ -51,7 +52,7 @@ const skillGroups: SkillGroup[] = [
 
 export default function Skills() {
   return (
-    <section id="stack" className="relative py-20 px-6">
+    <section id="stack" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -101,13 +102,18 @@ export default function Skills() {
 
                 {/* Tech pills */}
                 <div className="flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
-                    <span
+                  {group.skills.map((skill, skillIndex) => (
+                    <motion.div
                       key={skill}
-                      className="px-3 py-1 text-xs font-medium rounded-full bg-zinc-800/80 border border-white/8 text-zinc-300 hover:border-white/20 hover:text-white hover:bg-zinc-700/80 transition-all duration-200 cursor-default"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: (i * 0.08) + (skillIndex * 0.05) }}
                     >
-                      {skill}
-                    </span>
+                      <Badge variant="secondary" className="px-3 py-1 text-xs font-medium">
+                        {skill}
+                      </Badge>
+                    </motion.div>
                   ))}
                 </div>
               </motion.div>

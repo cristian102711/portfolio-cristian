@@ -2,10 +2,18 @@
 
 import { motion } from 'framer-motion'
 import { Download, MapPin, Mail } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useState } from 'react'
 
 export default function About() {
+  const [isDownloading, setIsDownloading] = useState(false)
+
+  const handleDownload = () => {
+    setIsDownloading(true)
+    setTimeout(() => setIsDownloading(false), 2000)
+  }
   return (
-    <section id="about" className="relative py-20 px-6">
+    <section id="about" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
@@ -25,7 +33,7 @@ export default function About() {
               </div>
               <div className="absolute inset-[3px] rounded-full overflow-hidden bg-zinc-800 border-2 border-violet-500/30">
                 {/* Fallback avatar (No profile photo uploaded yet) */}
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-900 to-fuchsia-900">
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-900 to-fuchsia-900" role="img" aria-label="Avatar de Cristian Velásquez">
                   <span className="text-5xl font-black text-white/90 select-none tracking-tighter">
                     CV
                   </span>
@@ -93,12 +101,27 @@ export default function About() {
             <motion.a
               href="/cv/CV_Cristianvelasquez.pdf"
               download
-              className="flex items-center gap-3 px-6 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-sm w-full justify-center hover:shadow-lg hover:shadow-violet-500/30 transition-all"
+              className="w-full justify-center hover:shadow-lg hover:shadow-violet-500/30 transition-all focus-ring"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              <Download size={16} />
-              Descargar CV en PDF
+              <Button 
+                className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-sm px-6 py-3.5 rounded-xl w-full"
+                onClick={handleDownload}
+                disabled={isDownloading}
+              >
+                {isDownloading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Descargando...
+                  </>
+                ) : (
+                  <>
+                    <Download size={16} />
+                    Descargar CV
+                  </>
+                )}
+              </Button>
             </motion.a>
           </motion.div>
 

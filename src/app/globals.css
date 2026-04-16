@@ -7,8 +7,31 @@
 }
 
 :root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #8b5cf6;
+}
+
+.dark {
   --background: #0a0a0b;
   --foreground: #fafafa;
+  --primary: #a78bfa;
+  --primary-foreground: #0a0a0b;
+  --secondary: #1e293b;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --border: #334155;
+  --input: #334155;
+  --ring: #a78bfa;
 }
 
 html {
@@ -20,6 +43,7 @@ body {
   background: var(--background);
   font-family: var(--font-space), system-ui, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @layer utilities {
@@ -28,10 +52,26 @@ body {
   }
   .animate-spin-slow {
     animation: spin-slow 8s linear infinite;
+    will-change: transform;
   }
   .animate-marquee {
     animation: marquee 35s linear infinite;
+    will-change: transform;
   }
+  .animate-blink {
+    animation: blink 1s steps(2, start) infinite;
+  }
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950;
+  }
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 @keyframes marquee {
@@ -39,7 +79,10 @@ body {
   100% { transform: translateX(-50%); }
 }
 
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
