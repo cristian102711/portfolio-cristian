@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sun, Moon, ArrowUp } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { Menu, X, ArrowUp } from 'lucide-react'
+import ThemeToggle from '@/components/shared/ThemeToggle'
 
 const navLinks = [
   { href: '#hero',      label: 'Inicio' },
@@ -21,8 +21,6 @@ export default function Navbar() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const { theme, resolvedTheme, setTheme } = useTheme()
-  const currentTheme = mounted ? (resolvedTheme || theme) : 'dark'
 
   useEffect(() => {
     setMounted(true)
@@ -84,7 +82,7 @@ export default function Navbar() {
       transition={{ duration: 0.7, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-zinc-950/85 backdrop-blur-md border-b border-white/5 py-3'
+          ? 'bg-white/85 dark:bg-zinc-950/85 backdrop-blur-md border-b border-slate-200/80 dark:border-white/5 py-3'
           : 'bg-transparent py-5'
       }`}
     >
@@ -108,7 +106,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`relative px-3 py-2 text-sm rounded-lg transition-colors ${
-                  isActive ? 'text-white' : 'text-zinc-400 hover:text-white'
+                  isActive ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 whileHover={{ y: -1 }}
               >
@@ -127,20 +125,10 @@ export default function Navbar() {
 
         {/* Theme Toggle & CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <button
-            onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-all focus-ring touch-target"
-            aria-label={currentTheme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
-          >
-            {currentTheme === 'dark' ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </button>
+          <ThemeToggle />
           <motion.a
             href="#contact"
-            className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl border border-violet-500/40 text-violet-300 hover:bg-violet-500/10 hover:border-violet-400/70 transition-all duration-300"
+            className="flex items-center gap-2 text-sm px-4 py-2 rounded-xl border border-violet-500/40 text-violet-300 hover:bg-violet-500/10 hover:border-violet-400/70 dark:text-violet-300 dark:hover:bg-violet-500/10 light:text-violet-700 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -165,34 +153,24 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-zinc-950/95 backdrop-blur-md border-t border-white/5"
+            className="md:hidden bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md border-t border-slate-200/80 dark:border-white/5"
           >
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-1">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-zinc-400 hover:text-white hover:bg-white/5 px-3 py-2.5 rounded-lg transition-all"
+                  className="text-sm text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 px-3 py-2.5 rounded-lg transition-all"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
                 </a>
               ))}
               <div className="flex items-center justify-between mt-2 px-3">
-                <button
-                  onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
-                  className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-all focus-ring touch-target"
-                  aria-label={currentTheme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
-                >
-                  {currentTheme === 'dark' ? (
-                    <Sun className="h-4 w-4" />
-                  ) : (
-                    <Moon className="h-4 w-4" />
-                  )}
-                </button>
+                <ThemeToggle />
                 <a
                   href="#contact"
-                  className="text-center text-sm px-4 py-2.5 rounded-xl border border-violet-500/40 text-violet-300"
+                  className="text-center text-sm px-4 py-2.5 rounded-xl border border-violet-500/40 text-violet-300 dark:text-violet-300"
                   onClick={() => setMenuOpen(false)}
                 >
                   Contáctame

@@ -58,7 +58,7 @@ export default function Contact() {
             </span>
             ?
           </h2>
-          <p className="text-zinc-400 text-lg mb-12 max-w-xl mx-auto leading-relaxed">
+          <p className="text-slate-500 dark:text-zinc-400 text-lg mb-12 max-w-xl mx-auto leading-relaxed">
             Estoy disponible para oportunidades freelance, trabajo remoto o
             posiciones full-time. Me encantaría hablar sobre cómo puedo ayudar a
             tu equipo.
@@ -75,7 +75,7 @@ export default function Contact() {
           <form className="flex flex-col gap-5 relative z-10" onSubmit={handleSubmit}>
             <div className="grid sm:grid-cols-2 gap-5">
               <div className="flex flex-col gap-2">
-                <label htmlFor="contact-name" className="text-xs text-zinc-400 uppercase tracking-wider">
+                <label htmlFor="contact-name" className="text-xs text-slate-500 dark:text-zinc-400 uppercase tracking-wider font-semibold">
                   Nombre
                 </label>
                 <input
@@ -84,11 +84,11 @@ export default function Contact() {
                   type="text"
                   required
                   placeholder="Tu nombre"
-                  className="bg-zinc-900/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all"
+                  className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all w-full"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="contact-email" className="text-xs text-zinc-400 uppercase tracking-wider">
+                <label htmlFor="contact-email" className="text-xs text-slate-500 dark:text-zinc-400 uppercase tracking-wider font-semibold">
                   Email
                 </label>
                 <input
@@ -97,12 +97,12 @@ export default function Contact() {
                   type="email"
                   required
                   placeholder="tu@email.com"
-                  className="bg-zinc-900/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all"
+                  className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all w-full"
                 />
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="contact-message" className="text-xs text-zinc-400 uppercase tracking-wider">
+              <label htmlFor="contact-message" className="text-xs text-slate-500 dark:text-zinc-400 uppercase tracking-wider font-semibold">
                 Mensaje
               </label>
               <textarea
@@ -111,7 +111,7 @@ export default function Contact() {
                 required
                 rows={4}
                 placeholder="Cuéntame sobre tu proyecto..."
-                className="bg-zinc-900/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all resize-none"
+                className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all resize-none w-full"
               />
             </div>
             <motion.button
@@ -156,7 +156,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-violet-500/40 hover:bg-violet-500/5 text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-violet-500/40 hover:bg-violet-500/5 text-sm transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -168,7 +168,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-sky-500/40 hover:bg-sky-500/5 text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-sky-500/40 hover:bg-sky-500/5 text-sm transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -178,7 +178,7 @@ export default function Contact() {
           <motion.a
             href="mailto:tu@email.com"
             aria-label="Email"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -189,7 +189,7 @@ export default function Contact() {
       </div>
 
       {/* Footer */}
-      <div className="max-w-6xl mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-zinc-600">
+      <div className="max-w-6xl mx-auto mt-20 pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400 dark:text-zinc-600">
         <span>© 2025 · Cristian Velásquez — Analista Programador</span>
         <span>Construido con Next.js · Three.js · Framer Motion</span>
       </div>

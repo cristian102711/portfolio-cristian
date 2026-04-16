@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic'
 import Navbar from '@/components/shared/Navbar'
+import CustomCursor from '@/components/shared/CustomCursor'
 import Hero from '@/components/ui/Hero'
 import About from '@/components/ui/About'
 
@@ -18,7 +19,8 @@ const Contact    = dynamic(() => import('@/components/ui/Contact'),    { loading
 
 export default function HomePage() {
   return (
-    <main className="bg-[#0a0a0b] min-h-screen text-white">
+    <main className="min-h-screen text-[var(--foreground)] lg:[cursor:none]" style={{ background: 'var(--background)' }}>
+      <CustomCursor />
       <Navbar />
       <Hero />
       <About />

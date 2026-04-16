@@ -79,7 +79,7 @@ export default function Hero() {
             transition={{ delay: 0.15, duration: 0.7, ease: 'easeOut' }}
             className="flex flex-col items-center"
           >
-            <p className="text-zinc-500 text-sm font-medium mb-3 tracking-widest uppercase">
+            <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium mb-3 tracking-widest uppercase">
               Hola, soy
             </p>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter mb-4">
@@ -91,7 +91,7 @@ export default function Hero() {
             </h1>
             
             {/* Typewriter text */}
-            <h2 className="text-xl md:text-2xl text-zinc-300 font-medium h-8 flex items-center justify-center gap-1">
+            <h2 className="text-xl md:text-2xl text-slate-800 dark:text-zinc-300 font-semibold h-8 flex items-center justify-center gap-1">
               {typedText}
               <span className={`w-[3px] h-6 bg-violet-400 inline-block ${isTyping ? 'animate-pulse' : 'animate-blink'}`} />
             </h2>
@@ -102,12 +102,12 @@ export default function Hero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.7, ease: 'easeOut' }}
-            className="text-zinc-400 text-lg leading-relaxed max-w-2xl mt-2"
+            className="text-slate-700 dark:text-zinc-400 text-lg leading-relaxed max-w-2xl mt-2"
           >
             Desarrollador apasionado por construir productos digitales que resuelven problemas reales.
             Combino{' '}
-            <span className="text-white font-medium">visión técnica</span> con{' '}
-            <span className="text-violet-400 font-medium">curiosidad constante</span>{' '}
+            <span className="text-slate-950 dark:text-white font-bold underline underline-offset-2 decoration-violet-400/40">visión técnica</span> con{' '}
+            <span className="text-violet-600 dark:text-violet-400 font-semibold">curiosidad constante</span>{' '}
             para crear soluciones escalables, limpias y listas para producción — desde APIs hasta interfaces que enamoran al usuario.
           </motion.p>
 
@@ -134,7 +134,7 @@ export default function Hero() {
             >
             <Button 
               variant="outline" 
-              className="px-8 py-3.5 rounded-xl border border-white/10 text-zinc-300 hover:border-violet-500/40 hover:text-white hover:bg-violet-500/5"
+              className="px-8 py-3.5 rounded-xl border-2 border-violet-500 text-violet-700 dark:text-violet-300 hover:bg-violet-500 hover:text-white dark:hover:bg-violet-500/20 transition-all font-semibold"
               onClick={handleDownload}
               disabled={isDownloading}
             >
@@ -187,7 +187,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-violet-500/50 hover:bg-violet-500/10 transition-all shadow-lg shadow-black/20 focus-ring"
+                className="w-12 h-12 rounded-2xl border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-violet-600 dark:hover:text-white hover:border-violet-500/50 hover:bg-violet-500/10 transition-all shadow-lg shadow-black/10 focus-ring"
                 whileHover={{ scale: 1.12, y: -4 }}
                 whileTap={{ scale: 0.95 }}
                 style={{ '--hover-color': color } as React.CSSProperties}
@@ -203,7 +203,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-600"
+          className="hidden sm:flex absolute bottom-2 left-1/2 -translate-x-1/2 flex-col items-center gap-1 text-slate-400 dark:text-zinc-600 z-0 opacity-60"
         >
           <span className="text-xs tracking-widest uppercase">Scroll</span>
           <motion.div

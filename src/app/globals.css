@@ -6,32 +6,48 @@
   --color-primary-glow: rgba(120, 119, 198, 0.2);
 }
 
+/* ── Modo Claro ──────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-  --primary: #8b5cf6;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #8b5cf6;
+  --background:          #fafbff;
+  --background-alt:      #f1f3fb;
+  --foreground:          #080d1a;
+  --foreground-muted:    #3d4a63;
+  --foreground-subtle:   #7b8599;
+
+  --primary:             #6d28d9;
+  --primary-foreground:  #ffffff;
+  --primary-glow:        rgba(109, 40, 217, 0.12);
+
+  --accent:              #0369a1;
+
+  /* Cards: blancas con sombra suave en vez de borde crudo */
+  --card-bg:             #ffffff;
+  --card-border:         rgba(99, 102, 241, 0.10);
+  --card-shadow:         0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(99,102,241,0.07);
+
+  --border:              #dde1f0;
+  --ring:                #6d28d9;
 }
 
+/* ── Modo Oscuro ─────────────────────────────────────────────────────── */
 .dark {
-  --background: #0a0a0b;
-  --foreground: #fafafa;
-  --primary: #a78bfa;
-  --primary-foreground: #0a0a0b;
-  --secondary: #1e293b;
-  --secondary-foreground: #f1f5f9;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --border: #334155;
-  --input: #334155;
-  --ring: #a78bfa;
+  --background:          #0a0a0b;
+  --background-alt:      #111114;
+  --foreground:          #fafafa;
+  --foreground-muted:    #a1a1aa;
+  --foreground-subtle:   #71717a;
+
+  --primary:             #a78bfa;
+  --primary-foreground:  #0a0a0b;
+  --primary-glow:        rgba(167, 139, 250, 0.15);
+
+  --accent:              #22d3ee;
+
+  --card-bg:             rgba(255, 255, 255, 0.03);
+  --card-border:         rgba(255, 255, 255, 0.08);
+
+  --border:              #334155;
+  --ring:                #a78bfa;
 }
 
 html {
@@ -47,7 +63,16 @@ body {
 }
 
 @layer utilities {
+  /* Card adaptativa: oscura en dark, blanca con sombra en light */
   .glass-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
+    box-shadow: var(--card-shadow, none);
+  }
+  /* Variante explícita solo oscura (para mantener compatibilidad) */
+  .glass-card-dark {
     @apply bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-2xl;
   }
   .animate-spin-slow {
@@ -62,10 +87,18 @@ body {
     animation: blink 1s steps(2, start) infinite;
   }
   .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2;
+    --tw-ring-offset-color: var(--background);
   }
   .touch-target {
     @apply min-h-[44px] min-w-[44px];
+  }
+  /* Texto adaptativo con variables */
+  .text-muted {
+    color: var(--foreground-muted);
+  }
+  .text-subtle {
+    color: var(--foreground-subtle);
   }
 }
 

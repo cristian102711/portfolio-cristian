@@ -9,9 +9,9 @@ import type { Project } from '@/data/projects'
 import { cn } from '@/lib/utils'
 
 const typeColors: Record<Project['type'], string> = {
-  mobile: 'text-sky-400 border-sky-400/30 bg-sky-400/10',
-  web: 'text-violet-400 border-violet-400/30 bg-violet-400/10',
-  game: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/10',
+  mobile: 'text-sky-600 dark:text-sky-400 border-sky-400/30 bg-sky-400/10',
+  web:    'text-violet-700 dark:text-violet-400 border-violet-400/30 bg-violet-400/10',
+  game:   'text-emerald-700 dark:text-emerald-400 border-emerald-400/30 bg-emerald-400/10',
 }
 
 const typeLabel: Record<Project['type'], string> = {
@@ -45,7 +45,7 @@ export default function Projects() {
               Destacados
             </span>
           </h2>
-          <p className="mt-4 text-zinc-400 max-w-xl mx-auto">
+          <p className="mt-4 text-slate-500 dark:text-zinc-400 max-w-xl mx-auto">
             Aplicaciones reales que resuelven problemas reales. Pasa el cursor
             para ver el preview en el celular.
           </p>
@@ -81,19 +81,19 @@ export default function Projects() {
                     >
                       {typeLabel[project.type]}
                     </span>
-                    <h3 className="mt-3 text-xl font-bold text-white group-hover:text-violet-200 transition-colors">
+                    <h3 className="mt-3 text-xl font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-200 transition-colors">
                       {project.title}
                     </h3>
-                    <p className="text-xs text-violet-400/80 mt-1.5 font-medium tracking-wide">
+                    <p className="text-xs text-violet-600 dark:text-violet-400/80 mt-1.5 font-medium tracking-wide">
                       {project.period}
                     </p>
                   </div>
-                  <span className="text-4xl font-black text-zinc-800 group-hover:text-zinc-700 transition-colors">
+                  <span className="text-4xl font-black text-slate-200 dark:text-zinc-800 group-hover:text-slate-300 dark:group-hover:text-zinc-700 transition-colors">
                     {project.id}
                   </span>
                 </div>
 
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
+                <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed mb-6">
                   {project.description}
                 </p>
 
@@ -102,7 +102,7 @@ export default function Projects() {
                   {project.tech.map((t) => (
                     <span
                       key={t}
-                      className="text-xs px-2.5 py-1 rounded-lg bg-zinc-800/60 text-zinc-300 border border-white/5"
+                      className="text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-zinc-800/60 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-white/5"
                     >
                       {t}
                     </span>
@@ -115,7 +115,7 @@ export default function Projects() {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white border border-white/10 hover:border-white/30 px-4 py-2 rounded-xl transition-all"
+                    className="flex items-center gap-2 text-sm text-slate-600 dark:text-zinc-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-white/10 hover:border-black dark:hover:border-white/30 px-4 py-2 rounded-xl transition-all font-medium"
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                   >

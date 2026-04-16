@@ -14,6 +14,7 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://portfolio-cristian.vercel.app'),
   // ── SEO Base ────────────────────────────────────────────────────────
   title: 'Cristian Velásquez | Full Stack Developer & Analista Programador',
   description:
@@ -81,8 +82,8 @@ export default function RootLayout({
       <body className="antialiased font-sans">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
           storageKey="theme"
         >

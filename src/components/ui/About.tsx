@@ -31,7 +31,7 @@ export default function About() {
               <div className="absolute inset-0 rounded-full p-[3px] bg-gradient-to-br from-violet-600 via-fuchsia-500 to-cyan-500 animate-spin-slow">
                 <div className="w-full h-full rounded-full bg-zinc-950" />
               </div>
-              <div className="absolute inset-[3px] rounded-full overflow-hidden bg-zinc-800 border-2 border-violet-500/30">
+              <div className="absolute inset-[3px] rounded-full overflow-hidden bg-zinc-800 dark:bg-zinc-800 border-2 border-violet-500/30">
                 {/* Fallback avatar (No profile photo uploaded yet) */}
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-900 to-fuchsia-900" role="img" aria-label="Avatar de Cristian Velásquez">
                   <span className="text-5xl font-black text-white/90 select-none tracking-tighter">
@@ -40,18 +40,18 @@ export default function About() {
                 </div>
               </div>
               {/* Status dot */}
-              <div className="absolute bottom-2 right-2 w-5 h-5 bg-green-400 rounded-full border-2 border-zinc-950 animate-pulse z-10" />
+              <div className="absolute bottom-2 right-2 w-5 h-5 bg-green-400 rounded-full border-2 border-white dark:border-zinc-950 animate-pulse z-10" />
             </div>
 
             {/* Name + title */}
             <div className="text-center lg:text-left">
-              <h2 className="text-3xl font-extrabold tracking-tight text-white">
+              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Cristian Velásquez
               </h2>
-              <p className="mt-1 text-violet-300 font-medium">
+              <p className="mt-1 text-violet-700 dark:text-violet-300 font-medium">
                 Analista Programador · Full Stack Developer
               </p>
-              <div className="flex items-center justify-center lg:justify-start gap-4 mt-3 text-sm text-zinc-500">
+              <div className="flex items-center justify-center lg:justify-start gap-4 mt-3 text-sm text-slate-500 dark:text-zinc-500">
                 <span className="flex items-center gap-1.5">
                   <MapPin size={13} /> Chile
                 </span>
@@ -63,19 +63,19 @@ export default function About() {
             </div>
 
             {/* About text */}
-            <div className="space-y-4 text-zinc-400 leading-relaxed text-sm lg:text-base">
+            <div className="space-y-4 text-slate-600 dark:text-zinc-400 leading-relaxed text-sm lg:text-base">
               <p>
                 Soy{' '}
-                <span className="text-white font-medium">Analista Programador en formación en Duoc UC</span>,
+                <span className="text-slate-950 dark:text-white font-bold">Analista Programador en formación en Duoc UC</span>,
                 con experiencia real desarrollando productos Full Stack en entornos de producción.
                 Construyo desde cero sistemas web complejos con{' '}
-                <span className="text-violet-300 font-medium">Next.js, React, Node.js, Java y Flutter</span>,
+                <span className="text-violet-800 dark:text-violet-300 font-semibold">Next.js, React, Node.js, Java y Flutter</span>,
                 integrando autenticación, bases de datos y despliegue continuo.
               </p>
               <p>
                 Me adapto rápido a nuevos stacks, aprendo de forma autónoma y disfruto el trabajo colaborativo
                 con equipos técnicos. Mi objetivo es crear{' '}
-                <span className="text-cyan-400 font-medium">sistemas escalables, modulares y seguros</span>{' '}
+                <span className="text-cyan-800 dark:text-cyan-400 font-semibold">sistemas escalables, modulares y seguros</span>{' '}
                 que generen impacto real en el negocio y en los usuarios.
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function About() {
                   <span className="text-2xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
                     {stat.value}
                   </span>
-                  <span className="text-xs text-zinc-500">{stat.label}</span>
+                  <span className="text-xs text-slate-500 dark:text-zinc-500">{stat.label}</span>
                 </div>
               ))}
             </div>
@@ -157,12 +157,12 @@ export default function About() {
                 <div key={item.label} className="glass-card p-4">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <p className="text-sm font-semibold text-white">{item.label}</p>
-                      <p className="text-xs text-zinc-500">{item.desc}</p>
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white">{item.label}</p>
+                      <p className="text-xs text-slate-500 dark:text-zinc-500">{item.desc}</p>
                     </div>
                     <span className="text-xs font-bold text-violet-400">{item.pct}%</span>
                   </div>
-                  <div className="h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-slate-200 dark:bg-zinc-800 overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       whileInView={{ width: `${item.pct}%` }}

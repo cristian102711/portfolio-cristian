@@ -11,9 +11,9 @@ const typeBadge: Record<string, string> = {
 }
 
 const typeBadgeStyle: Record<string, string> = {
-  fulltime: 'border-violet-500/30 bg-violet-500/10 text-violet-300',
-  parttime: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300',
-  freelance: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  fulltime:  'border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-300',
+  parttime:  'border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-300',
+  freelance: 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-300',
 }
 
 export default function Experience() {
@@ -39,7 +39,7 @@ export default function Experience() {
               Profesional
             </span>
           </h2>
-          <p className="mt-4 text-zinc-400 max-w-xl mx-auto text-sm">
+          <p className="mt-4 text-slate-500 dark:text-zinc-400 max-w-xl mx-auto text-sm">
             Experiencia real construyendo productos en producción, automatizando procesos y trabajando con equipos técnicos.
           </p>
         </motion.div>
@@ -60,7 +60,7 @@ export default function Experience() {
                 className="relative pl-20 lg:pl-24"
               >
                 {/* Timeline dot */}
-                <div className="absolute left-[18px] lg:left-[26px] top-6 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-violet-500 bg-zinc-950 z-10 flex items-center justify-center">
+                <div className="absolute left-[18px] lg:left-[26px] top-6 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-violet-500 bg-white dark:bg-zinc-950 z-10 flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-violet-400" />
                 </div>
 
@@ -73,7 +73,7 @@ export default function Experience() {
                         <Briefcase size={18} className="text-violet-400" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-white group-hover:text-violet-200 transition-colors leading-tight">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-200 transition-colors leading-tight">
                           {exp.role}
                         </h3>
                         <p className="text-sm text-cyan-400 font-semibold mt-0.5">{exp.company}</p>
@@ -83,7 +83,8 @@ export default function Experience() {
                       <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${typeBadgeStyle[exp.type]}`}>
                         {typeBadge[exp.type]}
                       </span>
-                      <span className="text-xs text-zinc-500 px-2.5 py-1 rounded-full border border-white/8 bg-zinc-900/50">
+                      {/* Fecha — limpia, solo texto oscuro */}
+                      <span className="text-xs text-slate-500 dark:text-zinc-500 px-2.5 py-1 rounded-full border border-slate-200 dark:border-white/8 bg-slate-50 dark:bg-transparent font-medium">
                         {exp.period}
                       </span>
                     </div>
@@ -91,14 +92,14 @@ export default function Experience() {
 
                   {/* Location */}
                   <div className="flex items-center gap-1.5 mb-4">
-                    <MapPin size={13} className="text-zinc-500 flex-shrink-0" />
-                    <span className="text-xs text-zinc-500">{exp.location}</span>
+                    <MapPin size={13} className="text-slate-400 dark:text-zinc-500 flex-shrink-0" />
+                    <span className="text-xs text-slate-400 dark:text-zinc-500">{exp.location}</span>
                   </div>
 
                   {/* Highlights */}
                   <ul className="flex flex-col gap-2.5">
                     {exp.highlights.map((h, hi) => (
-                      <li key={hi} className="flex items-start gap-2.5 text-sm text-zinc-400 leading-relaxed">
+                      <li key={hi} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
                         <CheckCircle2 size={15} className="text-violet-500/70 flex-shrink-0 mt-0.5" />
                         {h}
                       </li>
