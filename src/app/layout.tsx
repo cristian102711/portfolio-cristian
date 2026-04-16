@@ -14,24 +14,46 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: 'Cristian Velásquez | Analista Programador Full Stack',
+  // ── SEO Base ────────────────────────────────────────────────────────
+  title: 'Cristian Velásquez | Full Stack Developer & Analista Programador',
   description:
-    'Portfolio personal de Cristian Velásquez — Analista Programador Full Stack. Desarrollo de apps móviles con Flutter, APIs con Java Spring Boot, y aplicaciones web modernas con Next.js.',
+    'Desarrollador Full Stack egresado de Duoc UC con experiencia real en producción. Construyo sistemas web y móviles escalables con Next.js, React, Node.js, Java y Flutter. Disponible para nuevos proyectos en Chile.',
   keywords: [
-    'portfolio', 'desarrollador', 'Flutter', 'Java', 'Spring Boot',
-    'Firebase', 'fullstack', 'Cristian Velásquez', 'Analista Programador', 'Chile',
+    'Full Stack Developer', 'Analista Programador', 'Cristian Velásquez',
+    'Next.js', 'React', 'Node.js', 'Java', 'Spring Boot', 'Flutter', 'Firebase',
+    'Desarrollador Chile', 'portfolio programador', 'Duoc UC', 'Santiago',
   ],
-  authors: [{ name: 'Cristian Velásquez' }],
-  viewport: 'width=device-width, initial-scale=1',
+  authors: [{ name: 'Cristian Velásquez', url: 'https://github.com/cristian102711' }],
+  creator: 'Cristian Velásquez',
+  robots: { index: true, follow: true },
+  alternates: { canonical: 'https://portfolio-cristian.vercel.app' },
+
+  // ── Open Graph (LinkedIn, Facebook, WhatsApp) ────────────────────────
   openGraph: {
-    title: 'Cristian Velásquez | Analista Programador Full Stack',
-    description: 'Apps móviles, sistemas web y experiencias digitales. Java · Spring Boot · Flutter · Firebase.',
     type: 'website',
-    url: 'https://cristian-velasquez.vercel.app',
+    locale: 'es_CL',
+    url: 'https://portfolio-cristian.vercel.app',
+    siteName: 'Portfolio — Cristian Velásquez',
+    title: 'Cristian Velásquez | Full Stack Developer',
+    description:
+      'Desarrollador apasionado por construir productos digitales que resuelven problemas reales. Experiencia en Next.js, React, Node.js, Java y Flutter. Disponible para trabajar.',
+    images: [
+      {
+        url: '/images/og-preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'Cristian Velásquez — Full Stack Developer Portfolio',
+      },
+    ],
   },
+
+  // ── Twitter / X Card ────────────────────────────────────────────────
   twitter: {
     card: 'summary_large_image',
     title: 'Cristian Velásquez | Full Stack Developer',
+    description:
+      'Analista Programador con experiencia real en producción. Next.js · React · Node.js · Java · Flutter.',
+    images: ['/images/og-preview.png'],
   },
 }
 
