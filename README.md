@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cristian Velásquez — Portfolio Personal
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-16.2-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?style=flat-square&logo=tailwindcss)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.x-EE4B96?style=flat-square&logo=framer)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=flat-square&logo=vercel)
 
-First, run the development server:
+> Portafolio profesional de Cristian Velásquez — Analista Programador & Full Stack Developer. Construido con Next.js App Router, animaciones avanzadas con Framer Motion, modo oscuro/claro y diseño premium.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Vista previa
+
+![Preview del portafolio](public/images/profile.jpg)
+
+🔗 **Producción:** [cristian-velasquez.vercel.app](https://cristian-velasquez.vercel.app) _(actualizar con URL real)_
+
+---
+
+## Stack tecnológico
+
+| Categoría | Tecnología |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Lenguaje | TypeScript 5 |
+| Estilos | Tailwind CSS v4 |
+| Animaciones | Framer Motion 12 |
+| Fuentes | Google Fonts — Outfit |
+| Iconos | Lucide React |
+| Deploy | Vercel |
+
+---
+
+## Estructura del proyecto
+
+```
+portfolio-cristian_velasquez/
+├── public/
+│   ├── cv/              # CV descargable en PDF
+│   └── images/          # Foto de perfil y assets
+├── scripts/
+│   └── clean-dev.ps1    # Script para arranque limpio (Windows)
+├── src/
+│   ├── app/
+│   │   ├── globals.css  # Sistema de diseño: tokens, utilidades, keyframes
+│   │   ├── layout.tsx   # Root layout: fuentes, metadata, providers
+│   │   └── page.tsx     # Página principal — composición de secciones
+│   ├── components/
+│   │   ├── shared/      # Componentes globales reutilizables
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── CustomCursor.tsx
+│   │   │   └── ThemeToggle.tsx
+│   │   └── ui/          # Secciones del portafolio + primitivos UI
+│   │       ├── Hero.tsx
+│   │       ├── About.tsx
+│   │       ├── Projects.tsx
+│   │       ├── Education.tsx
+│   │       ├── Experience.tsx
+│   │       ├── Skills.tsx
+│   │       ├── Contact.tsx
+│   │       ├── TiltCard.tsx
+│   │       ├── button.tsx
+│   │       ├── badge.tsx
+│   │       └── card.tsx
+│   ├── context/
+│   │   └── PortfolioContext.tsx  # Estado global del portafolio
+│   ├── data/
+│   │   └── projects.ts  # Datos de proyectos, educación y experiencia
+│   └── lib/
+│       └── utils.ts     # Utilidades compartidas (cn, clsx)
+├── .gitignore
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Instalación y uso
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/cristian102711/portfolio-cristian.git
+cd portfolio-cristian
 
-## Learn More
+# 2. Instalar dependencias
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# 3. Arrancar el servidor de desarrollo (limpio, sin conflictos de puerto)
+npm run dev:clean
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 4. O simplemente
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts disponibles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run dev:clean` | Limpia puertos y caché antes de arrancar |
+| `npm run build` | Build de producción |
+| `npm run start` | Servidor de producción |
+| `npm run lint` | Linter ESLint |
+
+---
+
+## Variables de entorno
+
+Este proyecto actualmente no requiere variables de entorno para funcionar en desarrollo. Si en el futuro se integran servicios externos (formulario de contacto, analytics, etc.), crear un archivo `.env.local`:
+
+```bash
+# Ejemplo — copiar este archivo como .env.local
+# NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+# NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+# NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+---
+
+## Características
+
+- ✅ **Modo oscuro / claro** con transición suave y persistencia
+- ✅ **Animaciones scroll-triggered** con Framer Motion (fade-in, slide-up, stagger)
+- ✅ **Efecto 3D tilt** en tarjetas de proyectos
+- ✅ **Cursor personalizado** con efecto de seguimiento fluido
+- ✅ **Barra de progreso de scroll** en la navegación
+- ✅ **Fuente tipográfica Outfit** — geométrica, moderna, no genérica
+- ✅ **Bento Grid** en sección About con foto circular animada
+- ✅ **Descarga de CV** desde el portafolio
+- ✅ **Responsive** — mobile, tablet y desktop
+- ✅ **Accesibilidad** — Skip links, ARIA labels, focus rings
+- ✅ **TypeScript estricto** — build limpio sin errores
+- ✅ **Tailwind v4** con clases canónicas actualizadas
+
+---
+
+## Despliegue
+
+El proyecto está configurado para desplegarse automáticamente en **Vercel** desde la rama `main`.
+
+```bash
+# Deploy manual
+npx vercel --prod
+```
+
+---
+
+## Licencia
+
+MIT © 2026 Cristian Velásquez
