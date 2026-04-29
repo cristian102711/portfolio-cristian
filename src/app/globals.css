@@ -22,8 +22,8 @@
 
   /* Cards: blancas con sombra suave en vez de borde crudo */
   --card-bg:             #ffffff;
-  --card-border:         rgba(99, 102, 241, 0.10);
-  --card-shadow:         0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(99,102,241,0.07);
+  --card-border:         rgba(109, 40, 217, 0.12);
+  --card-shadow:         0 1px 3px rgba(0,0,0,0.07), 0 6px 20px rgba(109,40,217,0.09);
 
   --border:              #dde1f0;
   --ring:                #6d28d9;
@@ -110,6 +110,11 @@ body {
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {

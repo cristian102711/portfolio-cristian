@@ -1,26 +1,20 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, Mail, Download } from 'lucide-react'
 import { FiGithub } from 'react-icons/fi'
 import { FaLinkedinIn } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
-
-const variants: any = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.15, duration: 0.7, ease: 'easeOut' },
-  }),
-}
 
 export default function Hero() {
   const fullText = "Desarrollador Full Stack | Estudiante Analista Programador"
   const [typedText, setTypedText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
   const [isDownloading, setIsDownloading] = useState(false)
+
+  const { scrollY } = useScroll()
+  const parallaxY = useTransform(scrollY, [0, 500], [0, -80])
 
   useEffect(() => {
     let currentIndex = 0
@@ -49,12 +43,12 @@ export default function Hero() {
     >
       {/* Background radial glows optimized for GPU */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-violet-600/8 blur-[140px] will-change-transform transform-gpu" />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-cyan-600/8 blur-[120px] will-change-transform transform-gpu" />
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-fuchsia-600/5 blur-[100px] will-change-transform transform-gpu" />
+        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-violet-600/5 blur-3xl" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-cyan-600/5 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-fuchsia-600/5 blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-32 pb-12">
+      <motion.div style={{ y: parallaxY }} className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-32 pb-12">
         <div className="flex flex-col items-center text-center gap-8">
 
           {/* ── Status Badge ─────────────────────────────────── */}
@@ -85,7 +79,7 @@ export default function Hero() {
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter mb-4">
               Cristian
               <br />
-              <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
                 Velásquez
               </span>
             </h1>
@@ -106,8 +100,8 @@ export default function Hero() {
           >
             Desarrollador apasionado por construir productos digitales que resuelven problemas reales.
             Combino{' '}
-            <span className="text-slate-950 dark:text-white font-bold underline underline-offset-2 decoration-violet-400/40">visión técnica</span> con{' '}
-            <span className="text-violet-600 dark:text-violet-400 font-semibold">curiosidad constante</span>{' '}
+            <span className="text-violet-600 dark:text-violet-300 font-bold">visión técnica</span> con{' '}
+            <span className="text-fuchsia-600 dark:text-fuchsia-400 font-semibold">curiosidad constante</span>{' '}
             para crear soluciones escalables, limpias y listas para producción — desde APIs hasta interfaces que enamoran al usuario.
           </motion.p>
 
@@ -122,7 +116,7 @@ export default function Hero() {
               href="#projects"
               className="group relative overflow-hidden transition-all hover:scale-105 hover:shadow-lg hover:shadow-violet-500/30 focus-ring"
             >
-              <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-sm px-8 py-3.5 rounded-xl">
+              <Button className="bg-linear-to-r from-violet-600 to-fuchsia-600 text-white font-semibold text-sm px-8 py-3.5 rounded-xl">
                 <span className="relative z-10">Ver mis proyectos</span>
                 <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
@@ -213,7 +207,7 @@ export default function Hero() {
             <ArrowDown size={15} />
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   )
 }

@@ -10,7 +10,7 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => setMounted(true), [])
-  if (!mounted) return <div className="w-14 h-7 rounded-full bg-zinc-800/50 animate-pulse" />
+  if (!mounted) return <div className="w-14 h-7 rounded-full bg-slate-200/60 dark:bg-white/10 border border-slate-200 dark:border-white/10" />
 
   const isDark = resolvedTheme === 'dark'
 
@@ -19,7 +19,7 @@ export default function ThemeToggle() {
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       className={`
-        relative flex items-center w-14 h-7 rounded-full transition-colors duration-300 focus-ring flex-shrink-0
+        relative flex items-center w-14 h-7 rounded-full transition-colors duration-300 focus-ring shrink-0
         ${isDark
           ? 'bg-violet-600 border border-violet-500/50'
           : 'bg-amber-200 border border-amber-300'}

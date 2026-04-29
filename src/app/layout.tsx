@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk, Geist } from 'next/font/google'
+import { Space_Grotesk, Outfit } from 'next/font/google'
 import './globals.css'
 import { PortfolioProvider } from '@/context/PortfolioContext'
 import { ThemeProvider } from 'next-themes'
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -62,7 +62,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={cn("font-sans", geist.variable)} suppressHydrationWarning>
+    <html lang="es" className={cn("font-sans", outfit.variable, spaceGrotesk.variable)} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

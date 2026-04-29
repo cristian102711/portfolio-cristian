@@ -20,11 +20,6 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('hero')
   const [scrollProgress, setScrollProgress] = useState(0)
   const [showBackToTop, setShowBackToTop] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     let ticking = false
@@ -34,19 +29,10 @@ export default function Navbar() {
         window.requestAnimationFrame(() => {
           setScrolled(window.scrollY > 30)
           setShowBackToTop(window.scrollY > 300)
-          
-          const sections = navLinks.map((l) => l.href.replace('#', ''))
-          for (let i = sections.length - 1; i >= 0; i--) {
-            const el = document.getElementById(sections[i])
-            if (el && window.scrollY >= el.offsetTop - 120) {
-              setActiveSection(sections[i])
-              break
-            }
-          }
 
           // Calculate scroll progress
           const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-          const progress = (window.scrollY / totalHeight) * 100
+          const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0
           setScrollProgress(progress)
 
           ticking = false
@@ -59,6 +45,27 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // IntersectionObserver — detects active section reliably for ALL sections
+  useEffect(() => {
+    const sectionIds = navLinks.map((l) => l.href.replace('#', ''))
+    const observers: IntersectionObserver[] = []
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id)
+      if (!el) return
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id)
+        },
+        { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+
+    return () => observers.forEach((o) => o.disconnect())
+  }, [])
+
   return (
     <>      {/* Skip to main content */}
       <a
@@ -68,9 +75,9 @@ export default function Navbar() {
         Saltar al contenido principal
       </a>
       {/* Scroll Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-zinc-800">
+      <div className="fixed top-0 left-0 right-0 z-50 h-[2px] bg-slate-200 dark:bg-zinc-800">
         <motion.div
-          className="h-full bg-gradient-to-r from-violet-500 to-cyan-500"
+          className="h-full bg-linear-to-r from-violet-500 to-cyan-500"
           style={{ width: `${scrollProgress}%` }}
           transition={{ duration: 0.1 }}
         />
@@ -106,14 +113,16 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`relative px-3 py-2 text-sm rounded-lg transition-colors ${
-                  isActive ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
+                  isActive
+                    ? 'text-slate-900 dark:text-white font-semibold'
+                    : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 whileHover={{ y: -1 }}
               >
                 {isActive && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-lg bg-white/8"
+                    className="absolute inset-0 rounded-lg bg-violet-100 dark:bg-white/8"
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
                   />
                 )}

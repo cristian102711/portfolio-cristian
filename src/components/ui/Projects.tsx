@@ -7,6 +7,7 @@ import { projects } from '@/data/projects'
 import { usePortfolio } from '@/context/PortfolioContext'
 import type { Project } from '@/data/projects'
 import { cn } from '@/lib/utils'
+import { TiltCard } from './TiltCard'
 
 const typeColors: Record<Project['type'], string> = {
   mobile: 'text-sky-600 dark:text-sky-400 border-sky-400/30 bg-sky-400/10',
@@ -53,16 +54,16 @@ export default function Projects() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {projects.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              onHoverStart={() => setActiveProject(project)}
-              onHoverEnd={() => setActiveProject(null)}
-              className="group relative glass-card p-6 cursor-default overflow-hidden transition-all duration-500 hover:border-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/10"
-            >
+            <TiltCard key={project.id} className="h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                onHoverStart={() => setActiveProject(project)}
+                onHoverEnd={() => setActiveProject(null)}
+                className="group relative glass-card p-6 cursor-default overflow-hidden transition-all duration-500 hover:border-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/10 h-full flex flex-col"
+              >
               {/* Hover gradient bg */}
               <div className="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-cyan-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
 
@@ -138,7 +139,8 @@ export default function Projects() {
                   )}
                 </div>
               </div>
-            </motion.div>
+              </motion.div>
+            </TiltCard>
           ))}
         </div>
       </div>

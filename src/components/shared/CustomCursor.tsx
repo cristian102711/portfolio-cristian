@@ -36,20 +36,20 @@ export default function CustomCursor() {
 
     const addListeners = () => {
       document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
-        el.addEventListener('mouseenter', onEnter)
-        el.addEventListener('mouseleave', onLeave)
+        // Solo agregar si no tiene ya el listener
+        if (!el.hasAttribute('data-cursor-listener')) {
+          el.addEventListener('mouseenter', onEnter)
+          el.addEventListener('mouseleave', onLeave)
+          el.setAttribute('data-cursor-listener', 'true')
+        }
       })
     }
 
     window.addEventListener('mousemove', move)
     addListeners()
 
-    // Re-scan cada 2s por si se montan nuevos elementos
-    const interval = setInterval(addListeners, 2000)
-
     return () => {
       window.removeEventListener('mousemove', move)
-      clearInterval(interval)
     }
   }, [mouseX, mouseY])
 
@@ -58,7 +58,7 @@ export default function CustomCursor() {
       {/* Punto central — sigue el mouse exacto */}
       <motion.div
         ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden lg:block"
+        className="fixed top-0 left-0 pointer-events-none z-9999 hidden lg:block"
         style={{ x: mouseX, y: mouseY }}
       >
         <div
@@ -70,7 +70,7 @@ export default function CustomCursor() {
       <motion.div
         ref={cursorRef}
         className="
-          fixed top-0 left-0 pointer-events-none z-[9998] hidden lg:block
+          fixed top-0 left-0 pointer-events-none z-9998 hidden lg:block
           w-8 h-8 rounded-full border border-violet-500/60
           -translate-x-1/2 -translate-y-1/2
           transition-[width,height,border-color,background-color] duration-200
