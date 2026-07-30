@@ -11,7 +11,7 @@ function RotatingTorus() {
   })
   return (
     <mesh ref={ref} rotation={[0.4, 0, 0]}>
-      <torusBufferGeometry args={[1.2, 0.4, 32, 64]} />
+      <torusGeometry args={[1.2, 0.4, 32, 64]} />
       <meshStandardMaterial color="#a78bfa" metalness={0.6} roughness={0.2} />
     </mesh>
   )
