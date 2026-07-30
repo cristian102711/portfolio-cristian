@@ -1,11 +1,18 @@
-'use client'
+ 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import React from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, Mail, Download } from 'lucide-react'
 import { FiGithub } from 'react-icons/fi'
 import { FaLinkedinIn } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
+
+const HeroScene = dynamic(() => import('./HeroScene'), {
+  ssr: false,
+  loading: () => <div className="w-full h-64 md:h-96 rounded-2xl bg-white/5 animate-pulse" />,
+})
 
 export default function Hero() {
   const fullText = "Construyo experiencias web que convierten ideas en productos"
@@ -64,6 +71,11 @@ export default function Hero() {
               Disponible para nuevos proyectos
             </span>
           </motion.div>
+
+          {/* 3D Scene (lazy-loaded) */}
+          <div className="w-full max-w-xl mt-8">
+            <HeroScene />
+          </div>
 
           {/* ── Text Content ─────────────────────────────────── */}
           <motion.div 
