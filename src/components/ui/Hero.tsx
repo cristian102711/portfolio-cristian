@@ -8,7 +8,7 @@ import { FaLinkedinIn } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 
 export default function Hero() {
-  const fullText = "Desarrollador Full Stack | Estudiante Analista Programador"
+  const fullText = "Construyo experiencias web que convierten ideas en productos"
   const [typedText, setTypedText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
   const [isDownloading, setIsDownloading] = useState(false)
@@ -98,11 +98,7 @@ export default function Hero() {
             transition={{ delay: 0.3, duration: 0.7, ease: 'easeOut' }}
             className="text-slate-700 dark:text-zinc-400 text-lg leading-relaxed max-w-2xl mt-2"
           >
-            Desarrollador apasionado por construir productos digitales que resuelven problemas reales.
-            Combino{' '}
-            <span className="text-violet-600 dark:text-violet-300 font-bold">visión técnica</span> con{' '}
-            <span className="text-fuchsia-600 dark:text-fuchsia-400 font-semibold">curiosidad constante</span>{' '}
-            para crear soluciones escalables, limpias y listas para producción — desde APIs hasta interfaces que enamoran al usuario.
+            Soluciones front-to-back centradas en usabilidad, rendimiento y lanzamiento rápido. Trabajo con React, Node y Three.js para crear productos listos para producción y escalables.
           </motion.p>
 
           <motion.div
