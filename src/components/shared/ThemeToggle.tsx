@@ -25,11 +25,11 @@ export default function ThemeToggle() {
       className={`
         relative flex items-center w-14 h-7 rounded-full transition-colors duration-300 focus-ring shrink-0
         ${isDark
-          ? 'bg-violet-600 border border-violet-500/50'
+          ? 'bg-emerald-600/90 border border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.3)]'
           : 'bg-amber-200 border border-amber-300'}
       `}
     >
-      {/* Thumb slider — usa justify con padding en vez de absolute */}
+      {/* Thumb slider */}
       <motion.div
         layout
         transition={{ type: 'spring', stiffness: 600, damping: 40 }}
@@ -46,7 +46,7 @@ export default function ThemeToggle() {
           transition={{ duration: 0.2 }}
         >
           {isDark
-            ? <Moon size={11} className="text-violet-600" />
+            ? <Moon size={11} className="text-emerald-700" />
             : <Sun  size={11} className="text-amber-500" />
           }
         </motion.div>
