@@ -87,12 +87,12 @@ export class PhysicsEngine {
 
       // Fuerza de Resorte Magnético hacia su base organizada (Auto-Ordenamiento)
       const toHome = new THREE.Vector3().subVectors(targetHome, p.position)
-      const springForce = toHome.multiplyScalar(4.8)
+      const springForce = toHome.multiplyScalar(3.2)
       p.velocity.addScaledVector(springForce, dt)
 
       // Repulsión Electromagnética del Cursor (Desordena al pasar el mouse)
       const distToRay = ray.distanceToPoint(p.position)
-      const magneticRadius = 3.3
+      const magneticRadius = 2.8
 
       if (distToRay < magneticRadius && distToRay > 0.01) {
         const closestPoint = new THREE.Vector3()
@@ -106,22 +106,22 @@ export class PhysicsEngine {
         const normPush = pushDir.normalize()
 
         // Fuerza radial de repulsión
-        const repulsionFactor = Math.pow(1 - distToRay / magneticRadius, 1.6)
-        const pushForce = normPush.clone().multiplyScalar(repulsionFactor * 32.0 * magneticPower)
+        const repulsionFactor = Math.pow(1 - distToRay / magneticRadius, 1.8)
+        const pushForce = normPush.clone().multiplyScalar(repulsionFactor * 12.0 * magneticPower)
 
         // Vórtice electromagnético de dispersión en 3D
         const spinVector = new THREE.Vector3(-normPush.y, normPush.x, Math.sin(t * 3 + idx))
-          .multiplyScalar(repulsionFactor * 14.0 * magneticPower)
+          .multiplyScalar(repulsionFactor * 3.0 * magneticPower)
 
         p.velocity.addScaledVector(pushForce.add(spinVector), dt)
 
         // Inducir carga de brillo electromagnético
-        p.charge = Math.min(1.0, p.charge + repulsionFactor * 0.5)
+        p.charge = Math.min(1.0, p.charge + repulsionFactor * 0.3)
       }
 
       // Disipación gradual de carga y fricción fluida de movimiento
       p.charge *= 0.94
-      p.velocity.multiplyScalar(0.93)
+      p.velocity.multiplyScalar(0.915)
     })
 
     // ── STEP 2: Motor de Colisión Físico Esfera contra Esfera (3 Pasadas) ──
