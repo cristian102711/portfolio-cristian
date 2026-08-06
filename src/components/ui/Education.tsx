@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { education } from '@/data/projects'
-import { GraduationCap, Briefcase, ShieldCheck, Award, Building2, Backpack } from 'lucide-react'
+import { LucideIcon, GraduationCap, Briefcase, ShieldCheck, Award, Building2, Backpack } from 'lucide-react'
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   graduation: GraduationCap,
   briefcase: Briefcase,
   shield: ShieldCheck,

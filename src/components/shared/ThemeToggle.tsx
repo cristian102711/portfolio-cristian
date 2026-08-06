@@ -1,15 +1,19 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { motion } from 'framer-motion'
 import { Sun, Moon } from 'lucide-react'
 
+const subscribe = () => () => {}
+function useIsMounted() {
+  return useSyncExternalStore(subscribe, () => true, () => false)
+}
+
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useIsMounted()
 
-  useEffect(() => setMounted(true), [])
   if (!mounted) return <div className="w-14 h-7 rounded-full bg-slate-200/60 dark:bg-white/10 border border-slate-200 dark:border-white/10" />
 
   const isDark = resolvedTheme === 'dark'

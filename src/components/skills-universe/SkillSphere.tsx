@@ -1,12 +1,5 @@
 /** ────────────────────────────────────────────────────────────────
- *  SkillSphere — Esfera blanca brillante con calcomanía doble de logo y texto
- *
- *  Características:
- *  - Aspecto premium de cerámica/vidrio blanco brillante según la referencia.
- *  - Material físico (MeshPhysicalMaterial) con alto brillo (clearcoat) y rugosidad baja.
- *  - Rotación 3D física en sus ejes X/Y/Z proporcional a la velocidad lineal.
- *  - Calcomanías dobles (frontal y posterior) para mantener visibilidad al rotar.
- *  - Resorte rotacional de auto-alineación suave para regresar el logo de frente al reposar.
+ *  SkillSphere — Esfera física con calcomanía de logo y respuesta electromagnética
  * ──────────────────────────────────────────────────────────────── */
 
 'use client'
@@ -22,21 +15,21 @@ export interface ParticleState {
   velocity: THREE.Vector3
   basePosition: THREE.Vector3
   size: number
+  charge: number
   hovered: boolean
+  mass: number
 }
 
-/** 
- * Crea una textura de lienzo de alta resolución que combina el logo SVG y el texto centrado.
- * Renderiza con los colores de marca puros del desarrollador.
- */
 function usePrintedTexture(logoUrl: string, text: string, textColor: string, size = 1024): THREE.Texture | null {
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
 
   useEffect(() => {
+    let active = true
     const img = new Image()
     img.crossOrigin = 'anonymous'
 
     img.onload = () => {
+      if (!active) return
       const canvas = document.createElement('canvas')
       canvas.width = size
       canvas.height = size
@@ -45,7 +38,7 @@ function usePrintedTexture(logoUrl: string, text: string, textColor: string, siz
 
       ctx.clearRect(0, 0, size, size)
 
-      // 1. Dibujar el Logo SVG (optimizado para mayor tamaño)
+      // 1. Logo SVG
       const logoScale = 0.56
       const logoSize = size * logoScale
       const scale = Math.min(logoSize / img.width, logoSize / img.height)
@@ -56,7 +49,7 @@ function usePrintedTexture(logoUrl: string, text: string, textColor: string, siz
 
       ctx.drawImage(img, x, y, w, h)
 
-      // 2. Dibujar el Nombre Tecnológico (tamaño de fuente maximizado, negrita y centrado)
+      // 2. Texto
       ctx.font = 'bold 125px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
@@ -74,6 +67,9 @@ function usePrintedTexture(logoUrl: string, text: string, textColor: string, siz
     }
 
     img.src = logoUrl
+    return () => {
+      active = false
+    }
   }, [logoUrl, text, textColor, size])
 
   return texture
@@ -82,13 +78,13 @@ function usePrintedTexture(logoUrl: string, text: string, textColor: string, siz
 interface SkillSphereProps {
   skill: SkillData
   particleState: ParticleState
+  onHoverChange?: (hovered: boolean) => void
 }
 
-export default function SkillSphere({ skill, particleState }: SkillSphereProps) {
+export default function SkillSphere({ skill, particleState, onHoverChange }: SkillSphereProps) {
   const meshRef = useRef<THREE.Mesh>(null)
   const [hovered, setHovered] = useState(false)
 
-  // Selección dinámica de color de texto para alta visibilidad
   const finalTextColor = useMemo(() => {
     const lower = skill.color.toLowerCase()
     if (lower === '#ffffff' || lower === '#e8e8e8') {
@@ -100,10 +96,6 @@ export default function SkillSphere({ skill, particleState }: SkillSphereProps) 
   const printedTexture = usePrintedTexture(skill.logo, skill.name, finalTextColor)
   const currentScale = useRef(skill.size)
 
-  useEffect(() => {
-    particleState.hovered = hovered
-  }, [hovered, particleState])
-
   useFrame((_, delta) => {
     if (!meshRef.current) return
 
@@ -112,29 +104,34 @@ export default function SkillSphere({ skill, particleState }: SkillSphereProps) 
     // 1. Actualizar posición desde el motor de física
     meshRef.current.position.copy(particleState.position)
 
-    // 2. Movimiento de rotación 3D basado en la velocidad lineal
+    // 2. Rotación dinámica proporcional a la velocidad vectorial
     const vx = particleState.velocity.x
     const vy = particleState.velocity.y
     const vz = particleState.velocity.z
     const speed = Math.sqrt(vx * vx + vy * vy + vz * vz)
 
     if (speed > 0.02) {
-      // Rotar la esfera en ejes perpendiculares al vector de velocidad (rodamiento real)
-      meshRef.current.rotation.x -= vy * dt * 1.6
-      meshRef.current.rotation.y += vx * dt * 1.6
-      meshRef.current.rotation.z -= (vx - vy) * dt * 0.4
+      meshRef.current.rotation.x -= vy * dt * 1.8
+      meshRef.current.rotation.y += vx * dt * 1.8
+      meshRef.current.rotation.z -= (vx - vy) * dt * 0.5
     } else {
-      // Resorte rotacional para realinear la calcomanía frontal al reposar
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, 0, 0.06)
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, 0, 0.06)
-      meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, 0, 0.06)
+      // Auto-alineamiento suave al reposar
+      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, 0, 0.08)
+      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, 0, 0.08)
+      meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, 0, 0.08)
     }
 
-    // 3. Animación de escala al pasar el cursor (hover)
-    const targetScale = hovered ? skill.size * 1.12 : skill.size
-    currentScale.current += (targetScale - currentScale.current) * 0.1
+    // 3. Escala reactiva al hover y carga electromagnética
+    const targetScale = hovered
+      ? skill.size * 1.15
+      : skill.size * (1 + particleState.charge * 0.06)
+
+    currentScale.current += (targetScale - currentScale.current) * 0.12
     meshRef.current.scale.setScalar(currentScale.current)
   })
+
+  // Material de emisión según hover o pulso magnético
+  const activeIntensity = hovered ? 0.35 : Math.min(0.25, particleState.charge * 0.3)
 
   return (
     <mesh
@@ -142,25 +139,27 @@ export default function SkillSphere({ skill, particleState }: SkillSphereProps) 
       onPointerOver={(e) => {
         e.stopPropagation()
         setHovered(true)
+        onHoverChange?.(true)
         document.body.style.cursor = 'pointer'
       }}
       onPointerOut={() => {
         setHovered(false)
+        onHoverChange?.(false)
         document.body.style.cursor = 'auto'
       }}
     >
       <sphereGeometry args={[1, 64, 64]} />
 
-      {/* Material cerámico brillante blanco premium */}
+      {/* Material cerámico brillante blanco con respuesta de carga */}
       <meshPhysicalMaterial
         color="#ffffff"
-        roughness={0.12}
+        roughness={0.10}
         metalness={0.05}
         clearcoat={1.0}
-        clearcoatRoughness={0.03}
+        clearcoatRoughness={0.02}
         envMapIntensity={1.8}
-        emissive={hovered ? skill.color : '#000000'}
-        emissiveIntensity={hovered ? 0.12 : 0}
+        emissive={hovered || particleState.charge > 0.05 ? skill.color : '#000000'}
+        emissiveIntensity={activeIntensity}
       />
 
       {/* Calcomanía frontal */}
@@ -197,9 +196,14 @@ export default function SkillSphere({ skill, particleState }: SkillSphereProps) 
         </Decal>
       )}
 
-      {/* Brillo suave de marca al hacer hover */}
-      {hovered && (
-        <pointLight color={skill.color} intensity={0.7} distance={3.5} decay={2} />
+      {/* Luz puntual de respuesta electromagnética y hover */}
+      {(hovered || particleState.charge > 0.2) && (
+        <pointLight
+          color={skill.color}
+          intensity={hovered ? 0.9 : particleState.charge * 0.6}
+          distance={3.8}
+          decay={2}
+        />
       )}
     </mesh>
   )
