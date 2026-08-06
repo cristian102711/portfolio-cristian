@@ -5,46 +5,32 @@
 
 'use client'
 
-import { useMemo, useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import SkillSphere, { type ParticleState } from './SkillSphere'
 import { skills, type SkillData } from '@/data/skills-data'
-
-/** Función pura determinista para generar parámetros de flotación por índice */
-function getDriftParams(idx: number) {
-  const s1 = Math.sin(idx * 13.37 + 1.23) * 43758.5453
-  const s2 = Math.sin(idx * 73.11 + 4.56) * 43758.5453
-  const s3 = Math.sin(idx * 41.92 + 7.89) * 43758.5453
-  const f1 = Math.abs(s1 - Math.floor(s1))
-  const f2 = Math.abs(s2 - Math.floor(s2))
-  const f3 = Math.abs(s3 - Math.floor(s3))
-
-  return {
-    phaseX: f1 * Math.PI * 2,
-    phaseY: f2 * Math.PI * 2,
-    phaseZ: f3 * Math.PI * 2,
-    speedX: 0.35 + f1 * 0.3,
-    speedY: 0.30 + f2 * 0.3,
-    speedZ: 0.25 + f3 * 0.2,
-  }
-}
 
 /** Motor físico encapsulado en una clase para cero violaciones de react-hooks/immutability y refs */
 export class PhysicsEngine {
   particles: ParticleState[]
 
   constructor(skillsData: SkillData[]) {
-    this.particles = skillsData.map((s) => ({
-      position: new THREE.Vector3(...s.position),
-      velocity: new THREE.Vector3(0, 0, 0),
-      basePosition: new THREE.Vector3(...s.position),
-      size: s.size,
-      charge: 0,
-      hovered: false,
-      mass: Math.pow(s.size, 2.2),
-    }))
+    this.particles = skillsData.map((s, idx) => {
+      // Direcciones radiales bien distribuidas para que cada esfera viaje a su propia zona
+      const angle = (idx / skillsData.length) * Math.PI * 2 + (idx * 0.7)
+      const initialSpeed = 1.8 + (idx % 3) * 0.5
+      return {
+        position: new THREE.Vector3(...s.position),
+        velocity: new THREE.Vector3(Math.cos(angle) * initialSpeed, Math.sin(angle) * initialSpeed, 0),
+        basePosition: new THREE.Vector3(...s.position),
+        size: s.size,
+        charge: 0,
+        hovered: false,
+        mass: Math.pow(s.size, 2.0),
+      }
+    })
   }
 
   setHovered(index: number, hovered: boolean) {
@@ -55,76 +41,148 @@ export class PhysicsEngine {
 
   blast() {
     this.particles.forEach((p, idx) => {
-      const angle = (idx / this.particles.length) * Math.PI * 2 + (Math.sin(idx) * 0.5)
-      const force = 12 + Math.cos(idx * 3) * 6
+      const angle = (idx / this.particles.length) * Math.PI * 2 + (Math.sin(idx * 3) * 0.5)
+      const force = 8 + Math.cos(idx * 3) * 4
       p.velocity.x += Math.cos(angle) * force
       p.velocity.y += Math.sin(angle) * force
-      p.velocity.z += (Math.sin(idx * 2) - 0.5) * force * 0.8
       p.charge = 1.0
+    })
+  }
+
+  scatter() {
+    this.particles.forEach((p, idx) => {
+      const angle = (idx / this.particles.length) * Math.PI * 2 + (Math.sin(idx * 3.5) * 0.8)
+      const force = 4.0 + (idx % 4) * 1.2
+      p.velocity.x += Math.cos(angle) * force
+      p.velocity.y += Math.sin(angle) * force
+      p.charge = 0.8
+    })
+  }
+
+  clickImpulse(clickedIdx: number) {
+    const clicked = this.particles[clickedIdx]
+    if (!clicked) return
+
+    clicked.charge = 1.0
+
+    this.particles.forEach((p, idx) => {
+      if (idx === clickedIdx) {
+        p.velocity.z += 3.5
+        return
+      }
+
+      const dx = p.position.x - clicked.position.x
+      const dy = p.position.y - clicked.position.y
+      const dist = Math.sqrt(dx * dx + dy * dy) || 0.001
+
+      const hitRadius = 5.5
+      if (dist < hitRadius) {
+        const factor = 1 - dist / hitRadius
+        const pushX = dx / dist
+        const pushY = dy / dist
+        p.velocity.x += pushX * factor * 16.0
+        p.velocity.y += pushY * factor * 16.0
+        p.charge = Math.min(1.0, p.charge + factor * 0.8)
+      }
     })
   }
 
   update(
     dt: number,
     t: number,
-    ray: THREE.Ray,
+    mouseWorld: THREE.Vector3,
+    pointerVel: THREE.Vector3,
     magneticPower: number,
-    driftParams: ReturnType<typeof getDriftParams>[]
+    boundsX: number,
+    boundsY: number,
+    isMouseOver: boolean
   ) {
-    // ── STEP 1: Fuerza Repulsiva Electromagnética + Resorte Restaurador (Auto-ordenado) ──
+    // ── STEP 1: Movimiento y Magnetismo Restaurador al Centro ──
     this.particles.forEach((p, idx) => {
-      const pDrift = driftParams[idx]
+      if (isMouseOver) {
+        // ── CURSOR EN LA SECCIÓN: Se desordenan y se mueven por distintas partes de la sección ──
 
-      // Movimiento de flotación continua
-      const floatDrift = new THREE.Vector3(
-        Math.sin(t * pDrift.speedX + pDrift.phaseX) * 0.38,
-        Math.sin(t * pDrift.speedY + pDrift.phaseY) * 0.38,
-        Math.cos(t * pDrift.speedZ + pDrift.phaseZ) * 0.22
-      )
+        // 1. Repulsión suave del cursor al tocar una esfera
+        const dx = p.position.x - mouseWorld.x
+        const dy = p.position.y - mouseWorld.y
+        const dist2D = Math.sqrt(dx * dx + dy * dy)
+        const hitRadius = p.size + 1.6
 
-      // Posición base organizada con flotación natural
-      const targetHome = p.basePosition.clone().add(floatDrift)
-
-      // Fuerza de Resorte Magnético hacia su base organizada (Auto-Ordenamiento)
-      const toHome = new THREE.Vector3().subVectors(targetHome, p.position)
-      const springForce = toHome.multiplyScalar(3.2)
-      p.velocity.addScaledVector(springForce, dt)
-
-      // Repulsión Electromagnética del Cursor (Desordena al pasar el mouse)
-      const distToRay = ray.distanceToPoint(p.position)
-      const magneticRadius = 2.8
-
-      if (distToRay < magneticRadius && distToRay > 0.01) {
-        const closestPoint = new THREE.Vector3()
-        ray.closestPointToPoint(p.position, closestPoint)
-
-        const pushDir = new THREE.Vector3().subVectors(p.position, closestPoint)
-        if (pushDir.lengthSq() < 0.0001) {
-          pushDir.set(Math.sin(idx), Math.cos(idx), 0.5)
+        if (dist2D < hitRadius && dist2D > 0.001) {
+          const hitFactor = 1 - dist2D / hitRadius
+          const pushX = dx / dist2D
+          const pushY = dy / dist2D
+          p.velocity.x += pushX * hitFactor * 16.0 * dt
+          p.velocity.y += pushY * hitFactor * 16.0 * dt
+          p.charge = Math.min(1.0, p.charge + hitFactor * 0.5)
         }
 
-        const normPush = pushDir.normalize()
+        // 2. Movimiento de deriva suave para que floten por distintas partes de la sección
+        const driftAngle = t * (0.7 + idx * 0.07) + idx * 2.1
+        const driftX = Math.cos(driftAngle) * 1.8 + Math.sin(driftAngle * 1.2) * 1.2
+        const driftY = Math.sin(driftAngle * 0.9) * 1.8 + Math.cos(driftAngle * 0.8) * 1.2
 
-        // Fuerza radial de repulsión
-        const repulsionFactor = Math.pow(1 - distToRay / magneticRadius, 1.8)
-        const pushForce = normPush.clone().multiplyScalar(repulsionFactor * 12.0 * magneticPower)
+        p.velocity.x += driftX * dt
+        p.velocity.y += driftY * dt
 
-        // Vórtice electromagnético de dispersión en 3D
-        const spinVector = new THREE.Vector3(-normPush.y, normPush.x, Math.sin(t * 3 + idx))
-          .multiplyScalar(repulsionFactor * 3.0 * magneticPower)
+        // Mantenerlas dentro de límites aceptables sin que se escapen
+        const distFromHome = p.position.distanceTo(p.basePosition)
+        if (distFromHome > 3.5) {
+          const toHomeX = p.basePosition.x - p.position.x
+          const toHomeY = p.basePosition.y - p.position.y
+          p.velocity.x += toHomeX * 0.6 * dt
+          p.velocity.y += toHomeY * 0.6 * dt
+        }
 
-        p.velocity.addScaledVector(pushForce.add(spinVector), dt)
+      } else {
+        // ── CURSOR FUERA: Magnetismo elegante que reúne las esferas en su diseño base ──
+        const toHomeX = p.basePosition.x - p.position.x
+        const toHomeY = p.basePosition.y - p.position.y
+        const toHomeZ = p.basePosition.z - p.position.z
 
-        // Inducir carga de brillo electromagnético
-        p.charge = Math.min(1.0, p.charge + repulsionFactor * 0.3)
+        p.velocity.x += toHomeX * 5.5 * dt
+        p.velocity.y += toHomeY * 5.5 * dt
+        p.velocity.z += toHomeZ * 5.5 * dt
       }
 
-      // Disipación gradual de carga y fricción fluida de movimiento
-      p.charge *= 0.94
-      p.velocity.multiplyScalar(0.915)
+      // Límite de velocidad
+      const MAX_SPEED = isMouseOver ? 2.0 : 4.0
+      const currentSpeed = p.velocity.length()
+      if (currentSpeed > MAX_SPEED) {
+        p.velocity.multiplyScalar(MAX_SPEED / currentSpeed)
+      }
+
+      // Amortiguación de fricción
+      const friction = isMouseOver ? 0.95 : 0.85
+      p.velocity.x *= friction
+      p.velocity.y *= friction
+      p.velocity.z *= 0.80
+      p.charge *= 0.90
+
+      // Avanzar posición real X, Y, Z
+      p.position.x += p.velocity.x * dt
+      p.position.y += p.velocity.y * dt
+      p.position.z += p.velocity.z * dt
+
+      // PAREDES INVISIBLES DE LA SECCIÓN
+      const maxX = Math.max(5.8, boundsX - p.size * 0.4)
+      const maxY = Math.max(3.2, boundsY - p.size * 0.4)
+
+      if (Math.abs(p.position.x) > maxX) {
+        p.position.x = Math.sign(p.position.x) * maxX
+        p.velocity.x *= -0.5
+      }
+      if (Math.abs(p.position.y) > maxY) {
+        p.position.y = Math.sign(p.position.y) * maxY
+        p.velocity.y *= -0.5
+      }
+      if (Math.abs(p.position.z) > 0.6) {
+        p.position.z = Math.sign(p.position.z) * 0.6
+        p.velocity.z *= -0.3
+      }
     })
 
-    // ── STEP 2: Motor de Colisión Físico Esfera contra Esfera (3 Pasadas) ──
+    // ── STEP 2: Choque Elástico Físico entre Esferas (Física de Billar) ──
     for (let pass = 0; pass < 3; pass++) {
       for (let i = 0; i < this.particles.length; i++) {
         const pi = this.particles[i]
@@ -132,79 +190,102 @@ export class PhysicsEngine {
           const pj = this.particles[j]
 
           const dir = new THREE.Vector3().subVectors(pi.position, pj.position)
+          dir.z *= 0.2
           const dist = dir.length()
-          const minDist = (pi.size + pj.size) * 1.02
+          const minDist = (pi.size + pj.size) * 0.96
 
           if (dist < minDist && dist > 0.0001) {
             const overlap = minDist - dist
             const normal = dir.normalize()
 
-            // Masa acumulada para reparto de impulso
             const totalMass = pi.mass + pj.mass
             const ratioI = pj.mass / totalMass
             const ratioJ = pi.mass / totalMass
 
-            // Corrección de superposición (separación limpia)
-            pi.position.addScaledVector(normal, overlap * ratioI)
-            pj.position.addScaledVector(normal, -overlap * ratioJ)
+            // Desplazamiento suave para evitar solapamiento
+            pi.position.addScaledVector(normal, overlap * ratioI * 0.6)
+            pj.position.addScaledVector(normal, -overlap * ratioJ * 0.6)
 
-            // Intercambio de momento elástico en la colisión
             const relVel = new THREE.Vector3().subVectors(pi.velocity, pj.velocity)
             const velAlongNormal = relVel.dot(normal)
 
             if (velAlongNormal < 0) {
-              const restitution = 0.72 // Coeficiente de rebote vivo y natural
+              const restitution = 0.40 // Rebote suave y acolchado
               const impulseScalar = -(1 + restitution) * velAlongNormal / (1 / pi.mass + 1 / pj.mass)
 
               pi.velocity.addScaledVector(normal, impulseScalar / pi.mass)
               pj.velocity.addScaledVector(normal, -impulseScalar / pj.mass)
 
-              // Carga magnética por colisión
-              pi.charge = Math.min(1.0, pi.charge + 0.18)
-              pj.charge = Math.min(1.0, pj.charge + 0.18)
+              pi.charge = Math.min(1.0, pi.charge + 0.15)
+              pj.charge = Math.min(1.0, pj.charge + 0.15)
             }
           }
         }
       }
     }
-
-    // ── STEP 3: Integración de Posición y Paredes Bounding Box ──
-    this.particles.forEach((p) => {
-      p.position.addScaledVector(p.velocity, dt)
-
-      // Contención flexible en 3D
-      if (Math.abs(p.position.x) > 7.5) {
-        p.position.x = Math.sign(p.position.x) * 7.5
-        p.velocity.x *= -0.6
-      }
-      if (Math.abs(p.position.y) > 4.5) {
-        p.position.y = Math.sign(p.position.y) * 4.5
-        p.velocity.y *= -0.6
-      }
-      if (Math.abs(p.position.z) > 2.5) {
-        p.position.z = Math.sign(p.position.z) * 2.5
-        p.velocity.z *= -0.6
-      }
-    })
   }
+}
+
+interface ShockwaveEffect {
+  id: number
+  position: THREE.Vector3
+  color: string
+}
+
+function ShockwaveRing({ position, color }: { position: THREE.Vector3; color: string }) {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const matRef = useRef<THREE.MeshBasicMaterial>(null)
+
+  useFrame((_, delta) => {
+    if (!meshRef.current || !matRef.current) return
+    const dt = Math.min(delta, 0.03)
+
+    meshRef.current.scale.addScalar(dt * 14.0)
+    matRef.current.opacity -= dt * 2.5
+  })
+
+  return (
+    <mesh ref={meshRef} position={position} scale={0.5}>
+      <ringGeometry args={[0.8, 1.1, 48]} />
+      <meshBasicMaterial
+        ref={matRef}
+        color={color}
+        transparent
+        opacity={1.0}
+        side={THREE.DoubleSide}
+        toneMapped={false}
+      />
+    </mesh>
+  )
 }
 
 interface SkillSceneProps {
   blastTrigger?: number
   magneticPower?: number
+  isMouseOver?: boolean
 }
 
-export default function SkillScene({ blastTrigger = 0, magneticPower = 1.0 }: SkillSceneProps) {
-  const lightRef = useRef<THREE.PointLight>(null)
+export default function SkillScene({
+  blastTrigger = 0,
+  magneticPower = 1.0,
+  isMouseOver = false,
+}: SkillSceneProps) {
+  const sceneGroupRef = useRef<THREE.Group>(null)
   const prevTrigger = useRef(blastTrigger)
+  const [shockwaves, setShockwaves] = useState<ShockwaveEffect[]>([])
 
   // Instancia única del motor físico
   const [engine] = useState(() => new PhysicsEngine(skills))
 
-  // Parámetros de deriva calculados de forma determinista
-  const driftParams = useMemo(() => {
-    return skills.map((_, idx) => getDriftParams(idx))
-  }, [])
+  const prevMouseOver = useRef(isMouseOver)
+
+  // Disparar dispersión automática al entrar el cursor a la sección
+  useEffect(() => {
+    if (isMouseOver && !prevMouseOver.current) {
+      engine.scatter()
+    }
+    prevMouseOver.current = isMouseOver
+  }, [isMouseOver, engine])
 
   // Disparar pulso electromagnético expansivo cuando cambia blastTrigger
   useEffect(() => {
@@ -214,49 +295,80 @@ export default function SkillScene({ blastTrigger = 0, magneticPower = 1.0 }: Sk
     }
   }, [blastTrigger, engine])
 
+  const handleSphereClick = (index: number) => {
+    const skill = skills[index]
+    const particle = engine.particles[index]
+    if (!skill || !particle) return
+
+    // Disparar onda de repulsión física
+    engine.clickImpulse(index)
+
+    // Crear anillo 3D animado expansivo del color de la tecnología
+    const newWave: ShockwaveEffect = {
+      id: Date.now() + Math.random(),
+      position: particle.position.clone(),
+      color: skill.color,
+    }
+
+    setShockwaves((prev) => [...prev.slice(-5), newWave])
+  }
+
   useFrame((state) => {
     const dt = Math.min(state.clock.getDelta(), 0.03)
     const t = state.clock.elapsedTime
-    const ray = state.raycaster.ray
+    const viewport = state.viewport
+    const pointer = state.pointer
 
-    // Mover luz electromagnética guía en la escena según el cursor
-    if (lightRef.current) {
-      const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)
-      const targetPoint = new THREE.Vector3()
-      if (ray.intersectPlane(plane, targetPoint)) {
-        lightRef.current.position.lerp(targetPoint, 0.2)
-      }
+    // Posición exacta del mouse en el plano 3D del mundo (Z=0)
+    const mouseWorld = new THREE.Vector3(
+      (pointer.x * viewport.width) / 2,
+      (pointer.y * viewport.height) / 2,
+      0
+    )
+
+    // Inclinación Parallax sutil de toda la escena
+    if (sceneGroupRef.current) {
+      sceneGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+        sceneGroupRef.current.rotation.y,
+        isMouseOver ? pointer.x * 0.12 : 0,
+        0.05
+      )
+      sceneGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        sceneGroupRef.current.rotation.x,
+        isMouseOver ? -pointer.y * 0.10 : 0,
+        0.05
+      )
     }
 
-    // Actualizar simulador físico
-    engine.update(dt, t, ray, magneticPower, driftParams)
+    // Actualizar simulador físico usando isMouseOver real del contenedor
+    engine.update(
+      dt,
+      t,
+      mouseWorld,
+      new THREE.Vector3(0, 0, 0),
+      magneticPower,
+      viewport.width / 2,
+      viewport.height / 2,
+      isMouseOver
+    )
   })
 
   return (
-    <>
-      {/* ── Iluminación Escénica de Estudio ── */}
-      <ambientLight intensity={0.55} color="#ede9fe" />
-      <directionalLight position={[8, 10, 6]} intensity={1.3} color="#ffffff" />
-      <directionalLight position={[-8, 3, 5]} intensity={0.6} color="#a5f3fc" />
-      <directionalLight position={[0, -8, 4]} intensity={0.3} color="#c084fc" />
+    <group ref={sceneGroupRef}>
+      {/* ── Iluminación Escénica de Estudio Limpia ── */}
+      <ambientLight intensity={0.7} color="#ffffff" />
+      <directionalLight position={[8, 10, 6]} intensity={1.5} color="#ffffff" />
+      <directionalLight position={[-8, 3, 5]} intensity={0.8} color="#e0f2fe" />
+      <directionalLight position={[0, -8, 4]} intensity={0.4} color="#f3e8ff" />
 
       <Environment preset="studio" backgroundIntensity={0} />
 
-      {/* Controles de cámara con órbita suave */}
-      <OrbitControls
-        enableZoom={false}
-        enablePan={false}
-        autoRotate={false}
-        maxPolarAngle={Math.PI * 0.62}
-        minPolarAngle={Math.PI * 0.38}
-        maxAzimuthAngle={Math.PI * 0.25}
-        minAzimuthAngle={-Math.PI * 0.25}
-        rotateSpeed={0.35}
-        dampingFactor={0.05}
-        enableDamping
-      />
+      {/* Anillos 3D Expansivos al Click */}
+      {shockwaves.map((wave) => (
+        <ShockwaveRing key={wave.id} position={wave.position} color={wave.color} />
+      ))}
 
-      {/* Renderizado de Esferas */}
+      {/* Renderizado de Esferas Físicas */}
       {skills.map((skill, idx) => (
         <SkillSphere
           key={skill.id}
@@ -265,6 +377,6 @@ export default function SkillScene({ blastTrigger = 0, magneticPower = 1.0 }: Sk
           onHoverChange={(hovered) => engine.setHovered(idx, hovered)}
         />
       ))}
-    </>
+    </group>
   )
 }

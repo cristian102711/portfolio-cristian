@@ -79,11 +79,13 @@ interface SkillSphereProps {
   skill: SkillData
   particleState: ParticleState
   onHoverChange?: (hovered: boolean) => void
+  onClick?: () => void
 }
 
-export default function SkillSphere({ skill, particleState, onHoverChange }: SkillSphereProps) {
+export default function SkillSphere({ skill, particleState, onHoverChange, onClick }: SkillSphereProps) {
   const meshRef = useRef<THREE.Mesh>(null)
   const [hovered, setHovered] = useState(false)
+  const clickBoost = useRef(1.0)
 
   const finalTextColor = useMemo(() => {
     const lower = skill.color.toLowerCase()
@@ -96,7 +98,7 @@ export default function SkillSphere({ skill, particleState, onHoverChange }: Ski
   const printedTexture = usePrintedTexture(skill.logo, skill.name, finalTextColor)
   const currentScale = useRef(skill.size)
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (!meshRef.current) return
 
     const dt = Math.min(delta, 0.03)
@@ -104,34 +106,32 @@ export default function SkillSphere({ skill, particleState, onHoverChange }: Ski
     // 1. Actualizar posición desde el motor de física
     meshRef.current.position.copy(particleState.position)
 
-    // 2. Rotación dinámica proporcional a la velocidad vectorial
+    // 2. Orientación frontal fija: El logo SIEMPRE mira a la cámara con una inclinación 3D sutil
     const vx = particleState.velocity.x
     const vy = particleState.velocity.y
-    const vz = particleState.velocity.z
-    const speed = Math.sqrt(vx * vx + vy * vy + vz * vz)
 
-    if (speed > 0.02) {
-      meshRef.current.rotation.x -= vy * dt * 1.8
-      meshRef.current.rotation.y += vx * dt * 1.8
-      meshRef.current.rotation.z -= (vx - vy) * dt * 0.5
-    } else {
-      // Auto-alineamiento suave al reposar
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, 0, 0.08)
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, 0, 0.08)
-      meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, 0, 0.08)
-    }
+    // Inclinación suave reactiva al movimiento (máximo +-15 grados) sin voltear el logo jamás
+    const targetRotX = THREE.MathUtils.clamp(-vy * 0.12, -0.25, 0.25)
+    const targetRotY = THREE.MathUtils.clamp(vx * 0.12, -0.25, 0.25)
 
-    // 3. Escala reactiva al hover y carga electromagnética
+    meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetRotX, 0.1)
+    meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, targetRotY, 0.1)
+    meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, 0, 0.1)
+
+    // Disminuir impulso de click hacia 1.0 gradualmente
+    clickBoost.current = THREE.MathUtils.lerp(clickBoost.current, 1.0, 0.1)
+
+    // 3. Escala reactiva con rebote elástico al click, hover y carga electromagnética
     const targetScale = hovered
-      ? skill.size * 1.15
-      : skill.size * (1 + particleState.charge * 0.06)
+      ? skill.size * 1.30 * clickBoost.current
+      : skill.size * clickBoost.current * (1 + particleState.charge * 0.15)
 
-    currentScale.current += (targetScale - currentScale.current) * 0.12
+    currentScale.current += (targetScale - currentScale.current) * 0.18
     meshRef.current.scale.setScalar(currentScale.current)
   })
 
   // Material de emisión según hover o pulso magnético
-  const activeIntensity = hovered ? 0.35 : Math.min(0.25, particleState.charge * 0.3)
+  const activeIntensity = hovered ? 0.55 : Math.min(0.60, particleState.charge * 0.6)
 
   return (
     <mesh
@@ -146,6 +146,11 @@ export default function SkillSphere({ skill, particleState, onHoverChange }: Ski
         setHovered(false)
         onHoverChange?.(false)
         document.body.style.cursor = 'auto'
+      }}
+      onClick={(e) => {
+        e.stopPropagation()
+        clickBoost.current = 1.45 // Impulso pop instantáneo al click
+        onClick?.()
       }}
     >
       <sphereGeometry args={[1, 64, 64]} />

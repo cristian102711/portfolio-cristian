@@ -8,7 +8,7 @@
 
 'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { motion } from 'framer-motion'
 import SkillScene from './SkillScene'
@@ -23,6 +23,8 @@ function CanvasLoader() {
 }
 
 export default function SkillsUniverse() {
+  const [isMouseOver, setIsMouseOver] = useState(false)
+
   return (
     <section id="stack" className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -56,6 +58,10 @@ export default function SkillsUniverse() {
           transition={{ duration: 0.8, delay: 0.15 }}
           className="relative w-full overflow-hidden"
           style={{ height: 'clamp(450px, 65vh, 750px)' }}
+          onMouseEnter={() => setIsMouseOver(true)}
+          onMouseLeave={() => setIsMouseOver(false)}
+          onPointerEnter={() => setIsMouseOver(true)}
+          onPointerLeave={() => setIsMouseOver(false)}
         >
           <Suspense fallback={<CanvasLoader />}>
             <Canvas
@@ -75,7 +81,7 @@ export default function SkillsUniverse() {
               }}
               style={{ background: 'transparent' }}
             >
-              <SkillScene />
+              <SkillScene isMouseOver={isMouseOver} />
             </Canvas>
           </Suspense>
         </motion.div>
