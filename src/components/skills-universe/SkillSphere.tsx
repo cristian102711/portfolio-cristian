@@ -196,15 +196,6 @@ export default function SkillSphere({ skill, particleState, onHoverChange }: Ski
         </Decal>
       )}
 
-      {/* Luz puntual de respuesta electromagnética y hover */}
-      {(hovered || particleState.charge > 0.2) && (
-        <pointLight
-          color={skill.color}
-          intensity={hovered ? 0.9 : particleState.charge * 0.6}
-          distance={3.8}
-          decay={2}
-        />
-      )}
     </mesh>
   )
 }

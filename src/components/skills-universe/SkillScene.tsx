@@ -234,20 +234,11 @@ export default function SkillScene({ blastTrigger = 0, magneticPower = 1.0 }: Sk
 
   return (
     <>
-      {/* ── Iluminación Escénica ── */}
-      <ambientLight intensity={0.6} color="#ede9fe" />
+      {/* ── Iluminación Escénica de Estudio ── */}
+      <ambientLight intensity={0.55} color="#ede9fe" />
       <directionalLight position={[8, 10, 6]} intensity={1.3} color="#ffffff" />
       <directionalLight position={[-8, 3, 5]} intensity={0.6} color="#a5f3fc" />
       <directionalLight position={[0, -8, 4]} intensity={0.3} color="#c084fc" />
-
-      {/* Luz electromagnética móvil que sigue al cursor */}
-      <pointLight
-        ref={lightRef}
-        color="#38bdf8"
-        intensity={1.5}
-        distance={6}
-        decay={2}
-      />
 
       <Environment preset="studio" backgroundIntensity={0} />
 
