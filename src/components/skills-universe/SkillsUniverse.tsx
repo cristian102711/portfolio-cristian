@@ -36,12 +36,12 @@ export default function SkillsUniverse() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <span className="text-xs uppercase tracking-[6px] text-violet-400 font-medium">
+          <span className="text-xs uppercase tracking-[6px] text-emerald-500 dark:text-emerald-400 font-bold">
             Tecnologías
           </span>
-          <h2 className="mt-3 text-4xl lg:text-6xl font-bold tracking-tight">
+          <h2 className="mt-3 text-4xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white">
             Tech{' '}
-            <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
               Ecosystem
             </span>
           </h2>
@@ -62,6 +62,8 @@ export default function SkillsUniverse() {
           onMouseLeave={() => setIsMouseOver(false)}
           onPointerEnter={() => setIsMouseOver(true)}
           onPointerLeave={() => setIsMouseOver(false)}
+          onMouseMove={() => setIsMouseOver(true)}
+          onPointerMove={() => setIsMouseOver(true)}
         >
           <Suspense fallback={<CanvasLoader />}>
             <Canvas

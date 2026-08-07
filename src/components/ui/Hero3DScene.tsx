@@ -103,7 +103,7 @@ function FloatingParticles() {
     const pos = new Float32Array(count * 3)
 
     for (let i = 0; i < count; i++) {
-      pos[i * 3]     = (Math.random() - 0.5) * 16
+      pos[i * 3] = (Math.random() - 0.5) * 16
       pos[i * 3 + 1] = Math.random() * 4 - 1
       pos[i * 3 + 2] = (Math.random() - 0.5) * 10 - 2
     }

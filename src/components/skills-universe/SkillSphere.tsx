@@ -18,6 +18,11 @@ export interface ParticleState {
   charge: number
   hovered: boolean
   mass: number
+  rotX: number
+  rotY: number
+  rotZ: number
+  spinX: number
+  spinY: number
 }
 
 function usePrintedTexture(logoUrl: string, text: string, textColor: string, size = 1024): THREE.Texture | null {
@@ -39,7 +44,7 @@ function usePrintedTexture(logoUrl: string, text: string, textColor: string, siz
       ctx.clearRect(0, 0, size, size)
 
       // 1. Logo SVG
-      const logoScale = 0.56
+      const logoScale = 0.58
       const logoSize = size * logoScale
       const scale = Math.min(logoSize / img.width, logoSize / img.height)
       const w = img.width * scale
@@ -50,7 +55,7 @@ function usePrintedTexture(logoUrl: string, text: string, textColor: string, siz
       ctx.drawImage(img, x, y, w, h)
 
       // 2. Texto
-      ctx.font = 'bold 125px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      ctx.font = 'bold 130px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
 
@@ -83,6 +88,7 @@ interface SkillSphereProps {
 }
 
 export default function SkillSphere({ skill, particleState, onHoverChange, onClick }: SkillSphereProps) {
+  const groupRef = useRef<THREE.Group>(null)
   const meshRef = useRef<THREE.Mesh>(null)
   const [hovered, setHovered] = useState(false)
   const clickBoost = useRef(1.0)
@@ -98,25 +104,18 @@ export default function SkillSphere({ skill, particleState, onHoverChange, onCli
   const printedTexture = usePrintedTexture(skill.logo, skill.name, finalTextColor)
   const currentScale = useRef(skill.size)
 
-  useFrame((state, delta) => {
-    if (!meshRef.current) return
+  useFrame(() => {
+    if (!groupRef.current || !meshRef.current) return
 
-    const dt = Math.min(delta, 0.03)
+    const p = particleState
 
-    // 1. Actualizar posición desde el motor de física
-    meshRef.current.position.copy(particleState.position)
+    // 1. Actualizar posición del grupo directamente en la referencia
+    groupRef.current.position.set(p.position.x, p.position.y, p.position.z)
 
-    // 2. Orientación frontal fija: El logo SIEMPRE mira a la cámara con una inclinación 3D sutil
-    const vx = particleState.velocity.x
-    const vy = particleState.velocity.y
-
-    // Inclinación suave reactiva al movimiento (máximo +-15 grados) sin voltear el logo jamás
-    const targetRotX = THREE.MathUtils.clamp(-vy * 0.12, -0.25, 0.25)
-    const targetRotY = THREE.MathUtils.clamp(vx * 0.12, -0.25, 0.25)
-
-    meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetRotX, 0.1)
-    meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, targetRotY, 0.1)
-    meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, 0, 0.1)
+    // 2. Actualizar rotación del mesh directamente en la referencia
+    meshRef.current.rotation.x = p.rotX || 0
+    meshRef.current.rotation.y = p.rotY || 0
+    meshRef.current.rotation.z = p.rotZ || 0
 
     // Disminuir impulso de click hacia 1.0 gradualmente
     clickBoost.current = THREE.MathUtils.lerp(clickBoost.current, 1.0, 0.1)
@@ -124,7 +123,7 @@ export default function SkillSphere({ skill, particleState, onHoverChange, onCli
     // 3. Escala reactiva con rebote elástico al click, hover y carga electromagnética
     const targetScale = hovered
       ? skill.size * 1.30 * clickBoost.current
-      : skill.size * clickBoost.current * (1 + particleState.charge * 0.15)
+      : skill.size * clickBoost.current * (1 + p.charge * 0.15)
 
     currentScale.current += (targetScale - currentScale.current) * 0.18
     meshRef.current.scale.setScalar(currentScale.current)
@@ -134,73 +133,75 @@ export default function SkillSphere({ skill, particleState, onHoverChange, onCli
   const activeIntensity = hovered ? 0.55 : Math.min(0.60, particleState.charge * 0.6)
 
   return (
-    <mesh
-      ref={meshRef}
-      onPointerOver={(e) => {
-        e.stopPropagation()
-        setHovered(true)
-        onHoverChange?.(true)
-        document.body.style.cursor = 'pointer'
-      }}
-      onPointerOut={() => {
-        setHovered(false)
-        onHoverChange?.(false)
-        document.body.style.cursor = 'auto'
-      }}
-      onClick={(e) => {
-        e.stopPropagation()
-        clickBoost.current = 1.45 // Impulso pop instantáneo al click
-        onClick?.()
-      }}
-    >
-      <sphereGeometry args={[1, 64, 64]} />
+    <group ref={groupRef}>
+      <mesh
+        ref={meshRef}
+        onPointerOver={(e) => {
+          e.stopPropagation()
+          setHovered(true)
+          onHoverChange?.(true)
+          document.body.style.cursor = 'pointer'
+        }}
+        onPointerOut={() => {
+          setHovered(false)
+          onHoverChange?.(false)
+          document.body.style.cursor = 'auto'
+        }}
+        onClick={(e) => {
+          e.stopPropagation()
+          clickBoost.current = 1.45 // Impulso pop instantáneo al click
+          onClick?.()
+        }}
+      >
+        <sphereGeometry args={[1, 64, 64]} />
 
-      {/* Material cerámico brillante blanco con respuesta de carga */}
-      <meshPhysicalMaterial
-        color="#ffffff"
-        roughness={0.10}
-        metalness={0.05}
-        clearcoat={1.0}
-        clearcoatRoughness={0.02}
-        envMapIntensity={1.8}
-        emissive={hovered || particleState.charge > 0.05 ? skill.color : '#000000'}
-        emissiveIntensity={activeIntensity}
-      />
+        {/* Material cerámico brillante blanco con respuesta de carga */}
+        <meshPhysicalMaterial
+          color="#ffffff"
+          roughness={0.10}
+          metalness={0.05}
+          clearcoat={1.0}
+          clearcoatRoughness={0.02}
+          envMapIntensity={1.8}
+          emissive={hovered || particleState.charge > 0.05 ? skill.color : '#000000'}
+          emissiveIntensity={activeIntensity}
+        />
 
-      {/* Calcomanía frontal */}
-      {printedTexture && (
-        <Decal
-          position={[0, 0, 0.95]}
-          rotation={[0, 0, 0]}
-          scale={[1.65, 1.65, 1.65]}
-        >
-          <meshBasicMaterial
-            map={printedTexture}
-            transparent
-            polygonOffset
-            polygonOffsetFactor={-10}
-            toneMapped={false}
-          />
-        </Decal>
-      )}
+        {/* Calcomanía frontal */}
+        {printedTexture && (
+          <Decal
+            position={[0, 0, 0.95]}
+            rotation={[0, 0, 0]}
+            scale={[1.75, 1.75, 1.75]}
+          >
+            <meshBasicMaterial
+              map={printedTexture}
+              transparent
+              polygonOffset
+              polygonOffsetFactor={-10}
+              toneMapped={false}
+            />
+          </Decal>
+        )}
 
-      {/* Calcomanía posterior */}
-      {printedTexture && (
-        <Decal
-          position={[0, 0, -0.95]}
-          rotation={[0, Math.PI, 0]}
-          scale={[1.65, 1.65, 1.65]}
-        >
-          <meshBasicMaterial
-            map={printedTexture}
-            transparent
-            polygonOffset
-            polygonOffsetFactor={-10}
-            toneMapped={false}
-          />
-        </Decal>
-      )}
+        {/* Calcomanía posterior */}
+        {printedTexture && (
+          <Decal
+            position={[0, 0, -0.95]}
+            rotation={[0, Math.PI, 0]}
+            scale={[1.75, 1.75, 1.75]}
+          >
+            <meshBasicMaterial
+              map={printedTexture}
+              transparent
+              polygonOffset
+              polygonOffsetFactor={-10}
+              toneMapped={false}
+            />
+          </Decal>
+        )}
 
-    </mesh>
+      </mesh>
+    </group>
   )
 }

@@ -29,6 +29,11 @@ export class PhysicsEngine {
         charge: 0,
         hovered: false,
         mass: Math.pow(s.size, 2.0),
+        rotX: 0,
+        rotY: 0,
+        rotZ: 0,
+        spinX: 0,
+        spinY: 0,
       }
     })
   }
@@ -50,12 +55,12 @@ export class PhysicsEngine {
   }
 
   scatter() {
-    this.particles.forEach((p, idx) => {
-      const angle = (idx / this.particles.length) * Math.PI * 2 + (Math.sin(idx * 3.5) * 0.8)
-      const force = 4.0 + (idx % 4) * 1.2
-      p.velocity.x += Math.cos(angle) * force
-      p.velocity.y += Math.sin(angle) * force
-      p.charge = 0.8
+    this.particles.forEach((p) => {
+      const angle = Math.random() * Math.PI * 2
+      const speed = 5.0 + Math.random() * 3.0
+      p.velocity.x += Math.cos(angle) * speed
+      p.velocity.y += Math.sin(angle) * speed
+      p.charge = 1.0
     })
   }
 
@@ -97,45 +102,37 @@ export class PhysicsEngine {
     boundsY: number,
     isMouseOver: boolean
   ) {
-    // ── STEP 1: Movimiento y Magnetismo Restaurador al Centro ──
+    // ── STEP 1: Impulso de Desorden Fluido y Dinámico ──
     this.particles.forEach((p, idx) => {
+      // 1. Distancia 2D real entre el puntero y la esfera
+      const dx = p.position.x - mouseWorld.x
+      const dy = p.position.y - mouseWorld.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      const hitRadius = p.size * 1.4 + 1.2
+
+      // 2. GOLPE / REPULSIÓN DINÁMICA DEL CURSOR
+      if (dist < hitRadius && dist > 0.001) {
+        const factor = Math.pow(1 - dist / hitRadius, 1.1)
+        const pushX = dx / dist
+        const pushY = dy / dist
+
+        // Fuerza de impacto fluida y rápida
+        const cueSpeed = pointerVel.length()
+        const pushSpeed = Math.max(16.0, cueSpeed * 1.8)
+
+        p.velocity.x += (pushX * pushSpeed + pointerVel.x * 0.5) * factor * dt * 12.0
+        p.velocity.y += (pushY * pushSpeed + pointerVel.y * 0.5) * factor * dt * 12.0
+        p.charge = 1.0
+      }
+
+      // 3. MOVIMIENTO FLUIDO MIENTRAS EL MOUSE ESTÁ DENTRO // REAGRUPAR AL SALIR
       if (isMouseOver) {
-        // ── CURSOR EN LA SECCIÓN: Se desordenan y se mueven por distintas partes de la sección ──
-
-        // 1. Repulsión suave del cursor al tocar una esfera
-        const dx = p.position.x - mouseWorld.x
-        const dy = p.position.y - mouseWorld.y
-        const dist2D = Math.sqrt(dx * dx + dy * dy)
-        const hitRadius = p.size + 1.6
-
-        if (dist2D < hitRadius && dist2D > 0.001) {
-          const hitFactor = 1 - dist2D / hitRadius
-          const pushX = dx / dist2D
-          const pushY = dy / dist2D
-          p.velocity.x += pushX * hitFactor * 16.0 * dt
-          p.velocity.y += pushY * hitFactor * 16.0 * dt
-          p.charge = Math.min(1.0, p.charge + hitFactor * 0.5)
-        }
-
-        // 2. Movimiento de deriva suave para que floten por distintas partes de la sección
-        const driftAngle = t * (0.7 + idx * 0.07) + idx * 2.1
-        const driftX = Math.cos(driftAngle) * 1.8 + Math.sin(driftAngle * 1.2) * 1.2
-        const driftY = Math.sin(driftAngle * 0.9) * 1.8 + Math.cos(driftAngle * 0.8) * 1.2
-
-        p.velocity.x += driftX * dt
-        p.velocity.y += driftY * dt
-
-        // Mantenerlas dentro de límites aceptables sin que se escapen
-        const distFromHome = p.position.distanceTo(p.basePosition)
-        if (distFromHome > 3.5) {
-          const toHomeX = p.basePosition.x - p.position.x
-          const toHomeY = p.basePosition.y - p.position.y
-          p.velocity.x += toHomeX * 0.6 * dt
-          p.velocity.y += toHomeY * 0.6 * dt
-        }
-
+        // Flotación constante
+        const time = t * 1.2 + idx * 0.7
+        p.velocity.x += Math.cos(time * 0.9) * 0.8 * dt
+        p.velocity.y += Math.sin(time * 1.1) * 0.8 * dt
       } else {
-        // ── CURSOR FUERA: Magnetismo elegante que reúne las esferas en su diseño base ──
+        // Al quitar el cursor de la sección: Reagrupar a la posición original
         const toHomeX = p.basePosition.x - p.position.x
         const toHomeY = p.basePosition.y - p.position.y
         const toHomeZ = p.basePosition.z - p.position.z
@@ -143,81 +140,77 @@ export class PhysicsEngine {
         p.velocity.x += toHomeX * 5.5 * dt
         p.velocity.y += toHomeY * 5.5 * dt
         p.velocity.z += toHomeZ * 5.5 * dt
+
+        // Orientación frontal suave al regresar a la posición base
+        p.rotX = THREE.MathUtils.lerp(p.rotX, 0, 0.08)
+        p.rotY = THREE.MathUtils.lerp(p.rotY, 0, 0.08)
       }
 
-      // Límite de velocidad
-      const MAX_SPEED = isMouseOver ? 2.0 : 4.0
-      const currentSpeed = p.velocity.length()
-      if (currentSpeed > MAX_SPEED) {
-        p.velocity.multiplyScalar(MAX_SPEED / currentSpeed)
-      }
-
-      // Amortiguación de fricción
-      const friction = isMouseOver ? 0.95 : 0.85
+      // 4. Fricción progresiva ágil (0.92)
+      const friction = 0.92
       p.velocity.x *= friction
       p.velocity.y *= friction
-      p.velocity.z *= 0.80
-      p.charge *= 0.90
+      p.velocity.z *= 0.84
 
-      // Avanzar posición real X, Y, Z
+      // 5. Mover posición real X, Y, Z
       p.position.x += p.velocity.x * dt
       p.position.y += p.velocity.y * dt
       p.position.z += p.velocity.z * dt
 
-      // PAREDES INVISIBLES DE LA SECCIÓN
-      const maxX = Math.max(5.8, boundsX - p.size * 0.4)
-      const maxY = Math.max(3.2, boundsY - p.size * 0.4)
+      // 6. Rodamiento continuo más activo
+      p.rotX += (-p.velocity.y * 0.7) * dt
+      p.rotY += (p.velocity.x * 0.7) * dt
+
+      // Rebotes en bordes del lienzo
+      const maxX = Math.max(6.5, boundsX - p.size * 0.25)
+      const maxY = Math.max(3.6, boundsY - p.size * 0.25)
 
       if (Math.abs(p.position.x) > maxX) {
         p.position.x = Math.sign(p.position.x) * maxX
-        p.velocity.x *= -0.5
+        p.velocity.x *= -0.7
       }
       if (Math.abs(p.position.y) > maxY) {
         p.position.y = Math.sign(p.position.y) * maxY
-        p.velocity.y *= -0.5
-      }
-      if (Math.abs(p.position.z) > 0.6) {
-        p.position.z = Math.sign(p.position.z) * 0.6
-        p.velocity.z *= -0.3
+        p.velocity.y *= -0.7
       }
     })
 
-    // ── STEP 2: Choque Elástico Físico entre Esferas (Física de Billar) ──
+    // ── STEP 2: Colisiones Elásticas en Cadena entre Esferas (Físicas de Billar) ──
     for (let pass = 0; pass < 3; pass++) {
       for (let i = 0; i < this.particles.length; i++) {
         const pi = this.particles[i]
         for (let j = i + 1; j < this.particles.length; j++) {
           const pj = this.particles[j]
 
-          const dir = new THREE.Vector3().subVectors(pi.position, pj.position)
-          dir.z *= 0.2
-          const dist = dir.length()
+          const dx = pi.position.x - pj.position.x
+          const dy = pi.position.y - pj.position.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
           const minDist = (pi.size + pj.size) * 0.96
 
           if (dist < minDist && dist > 0.0001) {
             const overlap = minDist - dist
-            const normal = dir.normalize()
+            const nx = dx / dist
+            const ny = dy / dist
 
-            const totalMass = pi.mass + pj.mass
-            const ratioI = pj.mass / totalMass
-            const ratioJ = pi.mass / totalMass
+            // Separar esferas solapadas
+            pi.position.x += nx * overlap * 0.5
+            pi.position.y += ny * overlap * 0.5
+            pj.position.x -= nx * overlap * 0.5
+            pj.position.y -= ny * overlap * 0.5
 
-            // Desplazamiento suave para evitar solapamiento
-            pi.position.addScaledVector(normal, overlap * ratioI * 0.6)
-            pj.position.addScaledVector(normal, -overlap * ratioJ * 0.6)
-
-            const relVel = new THREE.Vector3().subVectors(pi.velocity, pj.velocity)
-            const velAlongNormal = relVel.dot(normal)
+            // Transferencia de impulso directo de golpe en cadena
+            const vxRel = pi.velocity.x - pj.velocity.x
+            const vyRel = pi.velocity.y - pj.velocity.y
+            const velAlongNormal = vxRel * nx + vyRel * ny
 
             if (velAlongNormal < 0) {
-              const restitution = 0.40 // Rebote suave y acolchado
-              const impulseScalar = -(1 + restitution) * velAlongNormal / (1 / pi.mass + 1 / pj.mass)
+              const restitution = 0.82 // Rebote elástico vivo estilo bola de billar real
+              const impulse = -(1 + restitution) * velAlongNormal / 2
 
-              pi.velocity.addScaledVector(normal, impulseScalar / pi.mass)
-              pj.velocity.addScaledVector(normal, -impulseScalar / pj.mass)
-
-              pi.charge = Math.min(1.0, pi.charge + 0.15)
-              pj.charge = Math.min(1.0, pj.charge + 0.15)
+              pi.velocity.x += nx * impulse
+              pi.velocity.y += ny * impulse
+              pj.velocity.x -= nx * impulse
+              pj.velocity.y -= ny * impulse
             }
           }
         }
@@ -313,39 +306,30 @@ export default function SkillScene({
     setShockwaves((prev) => [...prev.slice(-5), newWave])
   }
 
-  useFrame((state) => {
-    const dt = Math.min(state.clock.getDelta(), 0.03)
+  useFrame((state, delta) => {
+    const dt = Math.min(delta, 0.03)
     const t = state.clock.elapsedTime
     const viewport = state.viewport
     const pointer = state.pointer
 
-    // Posición exacta del mouse en el plano 3D del mundo (Z=0)
+    // Coordenadas 3D exactas del ratón en el plano Z=0 de las esferas
     const mouseWorld = new THREE.Vector3(
       (pointer.x * viewport.width) / 2,
       (pointer.y * viewport.height) / 2,
       0
     )
 
-    // Inclinación Parallax sutil de toda la escena
-    if (sceneGroupRef.current) {
-      sceneGroupRef.current.rotation.y = THREE.MathUtils.lerp(
-        sceneGroupRef.current.rotation.y,
-        isMouseOver ? pointer.x * 0.12 : 0,
-        0.05
-      )
-      sceneGroupRef.current.rotation.x = THREE.MathUtils.lerp(
-        sceneGroupRef.current.rotation.x,
-        isMouseOver ? -pointer.y * 0.10 : 0,
-        0.05
-      )
-    }
+    // Vector de velocidad del cursor (palo de billar)
+    const prevMouse = (state as unknown as { _prevMouse?: THREE.Vector3 })._prevMouse || mouseWorld.clone()
+    const pointerVel = new THREE.Vector3().subVectors(mouseWorld, prevMouse).divideScalar(Math.max(0.001, dt))
+    ;(state as unknown as { _prevMouse: THREE.Vector3 })._prevMouse = mouseWorld.clone()
 
-    // Actualizar simulador físico usando isMouseOver real del contenedor
+    // Actualizar motor de física en cada frame
     engine.update(
       dt,
       t,
       mouseWorld,
-      new THREE.Vector3(0, 0, 0),
+      pointerVel,
       magneticPower,
       viewport.width / 2,
       viewport.height / 2,
