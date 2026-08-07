@@ -7,7 +7,7 @@ import About from '@/components/ui/About'
 // Secciones debajo del fold — carga diferida para mejor rendimiento inicial
 const SectionSkeleton = () => (
   <div className="py-20 flex justify-center items-center">
-    <div className="w-8 h-8 rounded-full border-2 border-violet-500/30 border-t-violet-500 animate-spin" />
+    <div className="w-8 h-8 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin" />
   </div>
 )
 
