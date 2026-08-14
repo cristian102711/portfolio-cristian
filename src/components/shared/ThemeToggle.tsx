@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback, useRef } from 'react'
 import { useTheme } from 'next-themes'
 import { useSyncExternalStore } from 'react'
 import { motion } from 'framer-motion'
@@ -11,8 +12,62 @@ function useIsMounted() {
 }
 
 export default function ThemeToggle() {
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const { resolvedTheme, setTheme } = useTheme()
   const mounted = useIsMounted()
+
+  const onToggle = useCallback(() => {
+    const next = resolvedTheme === 'dark' ? 'light' : 'dark'
+    const button = buttonRef.current
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!button || reduceMotion) {
+      setTheme(next)
+      return
+    }
+
+    const { left, top, width, height } = button.getBoundingClientRect()
+    const cx = left + width / 2
+    const cy = top + height / 2
+    const radius = Math.hypot(
+      Math.max(cx, window.innerWidth - cx),
+      Math.max(cy, window.innerHeight - cy)
+    )
+
+    // Se evita tanto la View Transitions API (captura un snapshot de toda la
+    // página) como animar clip-path: ambos trabajan en el hilo principal y
+    // compiten con el canvas WebGL del Hero, lo que se percibe como un tirón.
+    // En cambio se escala un círculo con transform, que el navegador delega
+    // al compositor (GPU) y se mantiene fluido pase lo que pase en JS.
+    const overlay = document.createElement('div')
+    overlay.style.cssText =
+      'position:fixed;inset:0;z-index:2147483647;pointer-events:none;overflow:hidden;'
+
+    const circle = document.createElement('div')
+    circle.style.cssText = `position:absolute;left:${cx - radius}px;top:${cy - radius}px;width:${radius * 2}px;height:${radius * 2}px;border-radius:50%;background:${
+      next === 'dark' ? '#0b0f19' : '#f8fafc'
+    };transform:scale(0);will-change:transform;`
+
+    overlay.appendChild(circle)
+    document.body.appendChild(overlay)
+
+    const grow = circle.animate(
+      { transform: ['scale(0)', 'scale(1)'] },
+      { duration: 480, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'forwards' }
+    )
+
+    grow.finished
+      .then(() => {
+        setTheme(next)
+        // Un frame con el overlay opaco encima tapa el repaint del tema.
+        return new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+        )
+      })
+      .then(() => overlay.animate({ opacity: [1, 0] }, { duration: 220, easing: 'ease-out' }).finished)
+      .catch(() => {})
+      .then(() => overlay.remove())
+  }, [resolvedTheme, setTheme])
 
   if (!mounted) return <div className="w-14 h-7 rounded-full bg-slate-200/60 dark:bg-white/10 border border-slate-200 dark:border-white/10" />
 
@@ -20,7 +75,8 @@ export default function ThemeToggle() {
 
   return (
     <button
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      ref={buttonRef}
+      onClick={onToggle}
       aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       className={`
         relative flex items-center w-14 h-7 rounded-full transition-colors duration-300 focus-ring shrink-0

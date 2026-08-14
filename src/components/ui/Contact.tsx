@@ -38,8 +38,8 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative py-24 px-6">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-violet-500/40" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-violet-600/6 blur-[120px] pointer-events-none will-change-transform transform-gpu" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-emerald-500/40" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-emerald-600/6 blur-[120px] pointer-events-none will-change-transform transform-gpu" />
 
       <div className="max-w-3xl mx-auto text-center relative z-10">
         <motion.div
@@ -48,12 +48,12 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs uppercase tracking-[4px] text-violet-400 font-medium">
+          <span className="text-xs uppercase tracking-[4px] text-emerald-400 font-medium">
             Contacto
           </span>
           <h2 className="mt-3 text-4xl lg:text-5xl font-bold tracking-tight mb-6">
             ¿Tienes un{' '}
-            <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
               proyecto
             </span>
             ?
@@ -84,7 +84,7 @@ export default function Contact() {
                   type="text"
                   required
                   placeholder="Tu nombre"
-                  className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all w-full"
+                  className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition-all w-full"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -97,7 +97,7 @@ export default function Contact() {
                   type="email"
                   required
                   placeholder="tu@email.com"
-                  className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all w-full"
+                  className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition-all w-full"
                 />
               </div>
             </div>
@@ -111,13 +111,13 @@ export default function Contact() {
                 required
                 rows={4}
                 placeholder="Cuéntame sobre tu proyecto..."
-                className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/30 transition-all resize-none w-full"
+                className="bg-white dark:bg-zinc-900/60 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition-all resize-none w-full"
               />
             </div>
             <motion.button
               type="submit"
               disabled={status !== 'idle'}
-              className="flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold py-3.5 rounded-xl hover:shadow-lg hover:shadow-violet-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-white font-semibold py-3.5 rounded-xl hover:shadow-lg hover:shadow-emerald-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -125,7 +125,7 @@ export default function Contact() {
                 <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
               ) : status === 'success' ? (
                 <>
-                  <CheckCircle2 size={18} className="text-green-300" />
+                  <CheckCircle2 size={18} className="text-emerald-300" />
                   Mensaje Enviado
                 </>
               ) : (
@@ -139,7 +139,7 @@ export default function Contact() {
           
           {/* Success overlay glow */}
           {status === 'success' && (
-            <div className="absolute inset-0 bg-green-500/5 transition-opacity" />
+            <div className="absolute inset-0 bg-emerald-500/5 transition-opacity" />
           )}
         </motion.div>
 
@@ -156,7 +156,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-violet-500/40 hover:bg-violet-500/5 text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -168,7 +168,7 @@ export default function Contact() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-sky-500/40 hover:bg-sky-500/5 text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -176,7 +176,7 @@ export default function Contact() {
             LinkedIn
           </motion.a>
           <motion.a
-            href="mailto:tu@email.com"
+            href="mailto:cris.velasquezc@duocuc.cl"
             aria-label="Email"
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm transition-all"
             whileHover={{ scale: 1.05, y: -2 }}

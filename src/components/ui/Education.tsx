@@ -17,7 +17,7 @@ export default function Education() {
   return (
     <section id="education" className="relative py-20 px-6">
       {/* Top separator */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-violet-500/40" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-emerald-500/40" />
 
       <div className="max-w-6xl mx-auto">
         <motion.div
@@ -27,12 +27,12 @@ export default function Education() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-xs uppercase tracking-[4px] text-violet-400 font-medium">
+          <span className="text-xs uppercase tracking-[4px] text-emerald-400 font-medium">
             Formación
           </span>
           <h2 className="mt-3 text-4xl lg:text-5xl font-bold tracking-tight">
             Educación{' '}
-            <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
               Académica
             </span>
           </h2>
@@ -45,7 +45,7 @@ export default function Education() {
         {/* Timeline */}
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-violet-500/60 via-fuchsia-500/40 to-transparent" />
+          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500/60 via-teal-400/40 to-transparent" />
 
           <div className="flex flex-col gap-10">
             {education.map((edu, i) => {
@@ -65,15 +65,15 @@ export default function Education() {
                 >
                   {/* Timeline dot */}
                   <div
-                    className={`absolute left-[18px] lg:left-1/2 top-5 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-violet-500 bg-zinc-950 z-10 flex items-center justify-center`}
+                    className={`absolute left-[18px] lg:left-1/2 top-5 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-emerald-500 bg-zinc-950 z-10 flex items-center justify-center`}
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   </div>
 
                   {/* Card */}
-                  <div className="glass-card p-6 flex-1 hover:border-violet-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/10 group">
+                  <div className="glass-card p-6 flex-1 hover:border-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 group">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 mt-0.5 w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 group-hover:scale-110 group-hover:bg-violet-500/20 transition-all">
+                      <div className="flex-shrink-0 mt-0.5 w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
                         {(() => {
                           const Icon = iconMap[edu.icon] || GraduationCap
                           return <Icon size={24} />
@@ -81,10 +81,10 @@ export default function Education() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                          <h3 className="text-lg font-bold text-white group-hover:text-violet-200 transition-colors">
+                          <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                             {edu.degree}
                           </h3>
-                          <span className="text-xs px-2.5 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 whitespace-nowrap">
+                          <span className="text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 whitespace-nowrap">
                             {edu.period}
                           </span>
                         </div>
