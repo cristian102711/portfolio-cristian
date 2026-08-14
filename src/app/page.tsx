@@ -4,6 +4,8 @@ import CustomCursor from '@/components/shared/CustomCursor'
 import Hero from '@/components/ui/Hero'
 import About from '@/components/ui/About'
 
+const Preloader = dynamic(() => import('@/components/shared/Preloader'))
+
 // Secciones debajo del fold — carga diferida para mejor rendimiento inicial
 const SectionSkeleton = () => (
   <div className="py-20 flex justify-center items-center">
@@ -20,6 +22,7 @@ const Contact    = dynamic(() => import('@/components/ui/Contact'),    { loading
 export default function HomePage() {
   return (
     <main className="min-h-screen text-[var(--foreground)] lg:[cursor:none]" style={{ background: 'var(--background)' }}>
+      <Preloader />
       <CustomCursor />
       <Navbar />
       <Hero />

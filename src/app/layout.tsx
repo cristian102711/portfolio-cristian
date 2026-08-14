@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Space_Grotesk, Outfit } from 'next/font/google'
+import { Space_Grotesk, Outfit, Press_Start_2P } from 'next/font/google'
 import './globals.css'
 import { PortfolioProvider } from '@/context/PortfolioContext'
 import { ThemeProvider } from 'next-themes'
@@ -10,6 +10,13 @@ const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans', display: 's
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space',
+  display: 'swap',
+})
+
+const pressStart2P = Press_Start_2P({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-retro',
   display: 'swap',
 })
 
@@ -62,7 +69,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={cn("font-sans", outfit.variable, spaceGrotesk.variable)} suppressHydrationWarning>
+    <html lang="es" className={cn("font-sans", outfit.variable, spaceGrotesk.variable, pressStart2P.variable)} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
