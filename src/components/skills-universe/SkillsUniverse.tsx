@@ -17,7 +17,7 @@ import SkillScene from './SkillScene'
 function CanvasLoader() {
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="w-8 h-8 rounded-full border-2 border-violet-500/30 border-t-violet-500 animate-spin" />
+      <div className="w-8 h-8 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin" />
     </div>
   )
 }
@@ -45,7 +45,7 @@ export default function SkillsUniverse() {
               Ecosystem
             </span>
           </h2>
-          <p className="mt-4 text-zinc-400 max-w-xl mx-auto text-sm leading-relaxed">
+          <p className="mt-4 text-slate-500 dark:text-zinc-400 max-w-xl mx-auto text-sm leading-relaxed">
             Explora las tecnologías que uso cada día para construir productos digitales.
           </p>
         </motion.div>

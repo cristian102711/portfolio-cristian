@@ -110,7 +110,7 @@ export default function ThemeToggle() {
 
       {/* Decorative background icon */}
       {isDark
-        ? <Sun  size={10} className="absolute left-2   text-violet-200 opacity-70" />
+        ? <Sun  size={10} className="absolute left-2   text-amber-200 opacity-70" />
         : <Moon size={10} className="absolute right-2  text-amber-500 opacity-60" />
       }
     </button>

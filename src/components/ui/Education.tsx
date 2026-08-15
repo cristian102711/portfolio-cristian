@@ -36,7 +36,7 @@ export default function Education() {
               Académica
             </span>
           </h2>
-          <p className="mt-4 text-zinc-400 max-w-xl mx-auto">
+          <p className="mt-4 text-slate-500 dark:text-zinc-400 max-w-xl mx-auto">
             Mi formación combina conocimiento académico formal con certificaciones y
             aprendizaje autodidacta continuo.
           </p>
@@ -84,14 +84,14 @@ export default function Education() {
                           <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                             {edu.degree}
                           </h3>
-                          <span className="text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 whitespace-nowrap">
+                          <span className="text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 whitespace-nowrap">
                             {edu.period}
                           </span>
                         </div>
-                        <p className="text-sm text-cyan-400 font-medium mb-3">
+                        <p className="text-sm text-cyan-600 dark:text-cyan-400 font-medium mb-3">
                           {edu.institution}
                         </p>
-                        <p className="text-sm text-zinc-400 leading-relaxed">
+                        <p className="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
                           {edu.description}
                         </p>
                       </div>

@@ -12,9 +12,9 @@ const typeBadgeLabel: Record<string, string> = {
 }
 
 const typeBadgeStyle: Record<string, string> = {
-  fulltime: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400',
-  parttime: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400',
-  freelance: 'border-amber-500/30 bg-amber-500/10 text-amber-400',
+  fulltime: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  parttime: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400',
+  freelance: 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400',
 }
 
 const experienceTechs: Record<string, string[]> = {
@@ -140,35 +140,35 @@ export default function Experience() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '-10% 0px' }}
                       transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                      className="group rounded-2xl border border-white/10 bg-zinc-900/50 p-6 sm:p-7 backdrop-blur-sm transition-colors hover:border-emerald-500/30 hover:bg-zinc-900/70 shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
+                      className="group rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-zinc-900/60 p-6 sm:p-7 backdrop-blur-sm transition-colors hover:border-emerald-500/40 dark:hover:border-emerald-500/30 dark:hover:bg-zinc-900/80 shadow-[0_10px_30px_rgba(15,23,42,0.06)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
                     >
                       {/* Cabecera visible en móvil (empresa + periodo) */}
                       <div className="md:hidden mb-4 flex flex-wrap items-center gap-2">
                         <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-semibold ${typeBadgeStyle[exp.type]}`}>
                           {isCurrent ? 'Actualidad' : typeBadgeLabel[exp.type]}
                         </span>
-                        <span className="inline-flex items-center gap-1.5 text-xs text-zinc-400 font-medium">
-                          <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                        <span className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-zinc-400 font-medium">
+                          <Calendar className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                           {exp.period}
                         </span>
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors leading-tight">
+                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-tight">
                         {exp.role}
                       </h3>
-                      <div className="mt-1.5 flex items-center gap-2 text-sm font-semibold text-emerald-400">
+                      <div className="mt-1.5 flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                         <Building2 className="w-4 h-4" />
                         <span className="md:hidden">{exp.company}</span>
-                        <span className="inline-flex items-center gap-1 text-zinc-500 font-normal text-xs">
+                        <span className="inline-flex items-center gap-1 text-slate-500 dark:text-zinc-500 font-normal text-xs">
                           <MapPin className="w-3.5 h-3.5" />
                           {exp.location}
                         </span>
                       </div>
 
                       {/* Logros clave */}
-                      <div className="mt-5 pt-5 border-t border-white/10">
-                        <h4 className="text-xs uppercase tracking-wider text-zinc-400 font-bold mb-3 flex items-center gap-2">
-                          <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+                      <div className="mt-5 pt-5 border-t border-slate-200 dark:border-white/10">
+                        <h4 className="text-xs uppercase tracking-wider text-slate-500 dark:text-zinc-400 font-bold mb-3 flex items-center gap-2">
+                          <Terminal className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                           Logros de Ingeniería & Entregables
                         </h4>
                         <div className="space-y-2.5">
@@ -179,7 +179,7 @@ export default function Experience() {
                               whileInView={{ opacity: 1, x: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.4, delay: hIdx * 0.08 }}
-                              className="flex items-start gap-3 text-sm text-zinc-300 leading-relaxed"
+                              className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-300 leading-relaxed"
                             >
                               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                               <span>{h}</span>
@@ -194,7 +194,7 @@ export default function Experience() {
                           {techs.map((t) => (
                             <span
                               key={t}
-                              className="text-xs px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium"
+                              className="text-xs px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-medium"
                             >
                               {t}
                             </span>

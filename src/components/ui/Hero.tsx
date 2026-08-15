@@ -106,7 +106,7 @@ export default function Hero() {
             </h1>
             
             {/* Typewriter text */}
-            <h2 className="text-lg sm:text-xl md:text-2xl !text-white font-semibold h-10 flex items-center justify-center gap-1.5 max-w-2xl">
+            <h2 className="text-lg sm:text-xl md:text-2xl text-slate-800 dark:text-white font-semibold h-10 flex items-center justify-center gap-1.5 max-w-2xl">
               <span>{typedText}</span>
               <span className={`w-[3px] h-6 bg-emerald-400 rounded-full inline-block ${isTyping ? 'animate-pulse' : 'animate-blink'}`} />
             </h2>
@@ -118,7 +118,7 @@ export default function Hero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.25, duration: 0.6, ease: 'easeOut' }}
-            className="!text-white text-base sm:text-lg font-medium leading-relaxed max-w-2xl opacity-95"
+            className="text-slate-700 dark:text-slate-200 text-base sm:text-lg font-medium leading-relaxed max-w-2xl"
           >
             Soluciones front-to-back centradas en usabilidad, rendimiento y calidad. Especializado en React, Next.js, Node.js y experiencias interactivas escalables para producción.
           </motion.p>

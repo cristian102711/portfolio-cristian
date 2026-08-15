@@ -56,7 +56,7 @@ export default function CustomCursor() {
         style={{ x: mouseX, y: mouseY }}
         aria-hidden
       >
-        <div className="w-1.5 h-1.5 bg-violet-400 rounded-full -translate-x-1/2 -translate-y-1/2" />
+        <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full -translate-x-1/2 -translate-y-1/2" />
       </motion.div>
 
       {/* Anillo exterior — sigue con retraso */}
@@ -65,12 +65,12 @@ export default function CustomCursor() {
         aria-hidden
         className="
           fixed top-0 left-0 pointer-events-none z-9998 hidden lg:block
-          w-8 h-8 rounded-full border border-violet-500/60
+          w-8 h-8 rounded-full border border-emerald-500/60
           -translate-x-1/2 -translate-y-1/2
           transition-[width,height,border-color,background-color] duration-200
           [&.cursor-hover]:w-12 [&.cursor-hover]:h-12
-          [&.cursor-hover]:border-violet-400
-          [&.cursor-hover]:bg-violet-500/10
+          [&.cursor-hover]:border-emerald-400
+          [&.cursor-hover]:bg-emerald-500/10
         "
         style={{ x: springX, y: springY }}
       />
