@@ -7,11 +7,24 @@ import { ArrowDown, Mail, Download } from 'lucide-react'
 import { FiGithub } from 'react-icons/fi'
 import { FaLinkedinIn } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
+import Terminal, { type TermLine } from '@/components/ui/Terminal'
 
 const Hero3DScene = dynamic(() => import('@/components/ui/Hero3DScene'), {
   ssr: false,
   loading: () => null,
 })
+
+// Referencia estable: fuera del componente para no reiniciar la animación en cada render
+const terminalLines: TermLine[] = [
+  { kind: 'cmd', text: 'whoami' },
+  { kind: 'out', text: 'Cristian Velásquez — Full Stack Developer' },
+  { kind: 'cmd', text: 'cat stack.json' },
+  { kind: 'out', text: 'frontend: Next.js · React · TypeScript' },
+  { kind: 'out', text: 'backend:  Node.js · Java · Python' },
+  { kind: 'out', text: 'cloud:    Vercel · Supabase · Docker' },
+  { kind: 'cmd', text: './status --now' },
+  { kind: 'ok', text: 'Disponible para nuevos proyectos' },
+]
 
 export default function Hero() {
   const fullText = "Construyo experiencias web que convierten ideas en productos"
@@ -199,6 +212,17 @@ export default function Hero() {
                 <Icon size={19} />
               </motion.a>
             ))}
+          </motion.div>
+
+          {/* ── Terminal animado ─────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.55, duration: 0.7, ease: 'easeOut' }}
+            className="w-full max-w-xl mt-3"
+          >
+            <Terminal lines={terminalLines} />
           </motion.div>
         </div>
 
