@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ArrowUp } from 'lucide-react'
+import { Menu, X, ArrowUp, Search } from 'lucide-react'
 import ThemeToggle from '@/components/shared/ThemeToggle'
 
 const navLinks = [
@@ -146,8 +146,16 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* Right actions: ThemeToggle & Contact CTA */}
+            {/* Right actions: Command menu, ThemeToggle & Contact CTA */}
             <div className="hidden md:flex items-center gap-3">
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('open-cmdk'))}
+                className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-slate-500 dark:text-slate-400 bg-slate-100/60 dark:bg-slate-950/50 border border-slate-200/50 dark:border-slate-800/50 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-500/40 transition-colors focus-ring"
+                aria-label="Abrir menú de comandos (Ctrl o Cmd + K)"
+              >
+                <Search size={13} />
+                <kbd className="font-mono tracking-tight">⌘K</kbd>
+              </button>
               <ThemeToggle />
               <motion.a
                 href="#contact"

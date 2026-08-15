@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import Navbar from '@/components/shared/Navbar'
 import CustomCursor from '@/components/shared/CustomCursor'
+import CommandMenu from '@/components/shared/CommandMenu'
 import Hero from '@/components/ui/Hero'
 import About from '@/components/ui/About'
 
@@ -24,6 +25,7 @@ export default function HomePage() {
     <main className="min-h-screen text-[var(--foreground)] lg:[cursor:none]" style={{ background: 'var(--background)' }}>
       <Preloader />
       <CustomCursor />
+      <CommandMenu />
       <Navbar />
       <Hero />
       <About />

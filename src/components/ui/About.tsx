@@ -9,8 +9,10 @@ import {
 } from 'framer-motion'
 import { Download, MapPin, Mail, Code2, Layers, Rocket, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { BorderBeam } from '@/components/ui/BorderBeam'
+import { NumberTicker } from '@/components/ui/NumberTicker'
 import Image from 'next/image'
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 
 const stats = [
   { value: '10+', label: 'Proyectos' },
@@ -44,15 +46,25 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] as Transition['ease'], delay },
 })
 
+// Estilo de número de las stats (gradiente + hover) reutilizado para dígitos y sufijo
+const statGradient =
+  'text-2xl sm:text-3xl font-black bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent group-hover:from-emerald-300 group-hover:to-teal-300 transition-colors'
+
+// Divide un valor como "10+" en dígitos animados + sufijo; deja intacto lo no numérico ("FT")
+function StatValue({ value, delay }: { value: string; delay: number }) {
+  const match = /^(\d+)(\D*)$/.exec(value)
+  if (!match) return <span className={statGradient}>{value}</span>
+  return (
+    <span className="inline-flex items-baseline">
+      <NumberTicker value={Number(match[1])} delay={delay} className={statGradient} />
+      {match[2] && <span className={statGradient}>{match[2]}</span>}
+    </span>
+  )
+}
+
 // ── Expanded Holographic tilt card ─────────────────────────────────────
 function HoloCard() {
   const cardRef = useRef<HTMLDivElement>(null)
-  const [isDownloading, setIsDownloading] = useState(false)
-
-  const handleDownload = () => {
-    setIsDownloading(true)
-    setTimeout(() => setIsDownloading(false), 2000)
-  }
 
   const mouseX = useMotionValue(0.5)
   const mouseY = useMotionValue(0.5)
@@ -209,9 +221,7 @@ function HoloCard() {
                 transition={{ delay: 0.15 + i * 0.08 }}
                 className="flex flex-col items-center justify-center bg-slate-900/80 hover:bg-slate-800/80 transition-colors rounded-2xl py-4 px-2 border border-slate-800 hover:border-emerald-500/30 group"
               >
-                <span className="text-2xl sm:text-3xl font-black bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent group-hover:from-emerald-300 group-hover:to-teal-300 transition-colors">
-                  {s.value}
-                </span>
+                <StatValue value={s.value} delay={0.2 + i * 0.08} />
                 <span className="text-[11px] text-slate-400 font-medium text-center leading-tight mt-1">{s.label}</span>
               </motion.div>
             ))}
@@ -249,21 +259,10 @@ function HoloCard() {
               className="w-full sm:w-auto"
             >
               <Button
-                onClick={handleDownload}
-                disabled={isDownloading}
                 className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 hover:opacity-90 text-slate-950 font-bold rounded-xl px-7 py-3 text-sm shadow-lg shadow-emerald-500/20 transition-all"
               >
-                {isDownloading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-950 mr-2" />
-                    Descargando...
-                  </>
-                ) : (
-                  <>
-                    <Download size={15} className="mr-2" />
-                    Descargar CV Completo
-                  </>
-                )}
+                <Download size={15} className="mr-2" />
+                Descargar CV Completo
               </Button>
             </motion.a>
 
@@ -272,6 +271,10 @@ function HoloCard() {
               <p className="text-[10px] text-slate-600 font-mono">PASSPORT // FULL STACK 2024</p>
             </div>
           </div>
+
+          {/* Border beam: dos haces de luz recorriendo el borde de la tarjeta */}
+          <BorderBeam radius={32} size={72} duration={7} colorFrom="#10b981" colorTo="#22d3ee" className="z-30" />
+          <BorderBeam radius={32} size={72} duration={7} delay={3.5} colorFrom="#34d399" colorTo="#0ea5e9" className="z-30" />
 
         </div>
       </motion.div>

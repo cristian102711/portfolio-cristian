@@ -3,10 +3,10 @@
 import { useEffect, useRef } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
+const INTERACTIVE = 'a, button, [role="button"], input, textarea, select, label'
+
 export default function CustomCursor() {
-  const cursorRef  = useRef<HTMLDivElement>(null)
-  const dotRef     = useRef<HTMLDivElement>(null)
-  const isHovering = useRef(false)
+  const cursorRef = useRef<HTMLDivElement>(null)
 
   const mouseX = useMotionValue(-100)
   const mouseY = useMotionValue(-100)
@@ -16,7 +16,7 @@ export default function CustomCursor() {
   const springY = useSpring(mouseY, { stiffness: 150, damping: 20, mass: 0.5 })
 
   useEffect(() => {
-    // Solo en desktop
+    // Solo en desktop con puntero fino
     if (window.matchMedia('(pointer: coarse)').matches) return
 
     const move = (e: MouseEvent) => {
@@ -24,32 +24,27 @@ export default function CustomCursor() {
       mouseY.set(e.clientY)
     }
 
-    // Efecto hover en links/botones — el anillo se expande
-    const onEnter = () => {
-      isHovering.current = true
-      cursorRef.current?.classList.add('cursor-hover')
-    }
-    const onLeave = () => {
-      isHovering.current = false
-      cursorRef.current?.classList.remove('cursor-hover')
-    }
+    // Delegación de eventos: sin mutar el DOM ni añadir atributos (evita choques con React)
+    const closestInteractive = (node: EventTarget | null) =>
+      node instanceof Element ? node.closest(INTERACTIVE) : null
 
-    const addListeners = () => {
-      document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
-        // Solo agregar si no tiene ya el listener
-        if (!el.hasAttribute('data-cursor-listener')) {
-          el.addEventListener('mouseenter', onEnter)
-          el.addEventListener('mouseleave', onLeave)
-          el.setAttribute('data-cursor-listener', 'true')
-        }
-      })
+    const onOver = (e: MouseEvent) => {
+      if (closestInteractive(e.target)) cursorRef.current?.classList.add('cursor-hover')
+    }
+    const onOut = (e: MouseEvent) => {
+      const from = closestInteractive(e.target)
+      const to = closestInteractive(e.relatedTarget)
+      if (from && from !== to) cursorRef.current?.classList.remove('cursor-hover')
     }
 
     window.addEventListener('mousemove', move)
-    addListeners()
+    document.addEventListener('mouseover', onOver)
+    document.addEventListener('mouseout', onOut)
 
     return () => {
       window.removeEventListener('mousemove', move)
+      document.removeEventListener('mouseover', onOver)
+      document.removeEventListener('mouseout', onOut)
     }
   }, [mouseX, mouseY])
 
@@ -57,18 +52,17 @@ export default function CustomCursor() {
     <>
       {/* Punto central — sigue el mouse exacto */}
       <motion.div
-        ref={dotRef}
         className="fixed top-0 left-0 pointer-events-none z-9999 hidden lg:block"
         style={{ x: mouseX, y: mouseY }}
+        aria-hidden
       >
-        <div
-          className="w-1.5 h-1.5 bg-violet-400 rounded-full -translate-x-1/2 -translate-y-1/2"
-        />
+        <div className="w-1.5 h-1.5 bg-violet-400 rounded-full -translate-x-1/2 -translate-y-1/2" />
       </motion.div>
 
       {/* Anillo exterior — sigue con retraso */}
       <motion.div
         ref={cursorRef}
+        aria-hidden
         className="
           fixed top-0 left-0 pointer-events-none z-9998 hidden lg:block
           w-8 h-8 rounded-full border border-violet-500/60

@@ -30,7 +30,6 @@ export default function Hero() {
   const fullText = "Construyo experiencias web que convierten ideas en productos"
   const [typedText, setTypedText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
-  const [isDownloading, setIsDownloading] = useState(false)
 
   const { scrollY } = useScroll()
   const parallaxY = useTransform(scrollY, [0, 500], [0, -80])
@@ -48,12 +47,6 @@ export default function Hero() {
 
     return () => window.clearInterval(interval)
   }, [fullText])
-
-  const handleDownload = () => {
-    setIsDownloading(true)
-    // Simulate download delay
-    setTimeout(() => setIsDownloading(false), 2000)
-  }
 
   return (
     <section
@@ -153,23 +146,12 @@ export default function Hero() {
               download
               className="focus-ring"
             >
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="px-7 py-3.5 rounded-xl border-2 border-emerald-400/60 !text-white bg-slate-900/60 hover:bg-emerald-500/20 hover:border-emerald-400/90 transition-all duration-300 font-bold text-sm flex items-center gap-2 backdrop-blur-md"
-                onClick={handleDownload}
-                disabled={isDownloading}
               >
-                {isDownloading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-400 mr-1" />
-                    Descargando...
-                  </>
-                ) : (
-                  <>
-                    <Download size={16} className="text-emerald-400" />
-                    Descargar CV
-                  </>
-                )}
+                <Download size={16} className="text-emerald-400" />
+                Descargar CV
               </Button>
             </a>
           </motion.div>
